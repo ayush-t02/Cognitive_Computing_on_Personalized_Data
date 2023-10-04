@@ -1,9 +1,10 @@
 import "../styles/globals.css";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../reducer";
-import { auth } from "../utils/Firebase";
+import { auth, db } from "../utils/Firebase";
 import { wrapper, store } from "../reducer/user";
 import { Provider } from "react-redux";
+import React from "react";
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   React.useEffect(() => {
