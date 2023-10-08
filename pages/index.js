@@ -105,7 +105,7 @@ export default function Home() {
                     </span>
                   </span>
                   <a
-                    href="pricing.html"
+                    href="/"
                     className="token_upgrade techwave_fn_button"
                   >
                     <span>Upgrade</span>
@@ -144,13 +144,13 @@ export default function Home() {
                     <div className="item_popup" data-position="right">
                       <div className="ntfc_header">
                         <h2 className="ntfc_title">Notifications</h2>
-                        <a href="notifications.html">View All</a>
+                        <a href="/">View All</a>
                       </div>
                       <div className="ntfc_list">
                         <ul>
                           <li>
                             <p>
-                              <a href="notification-single.html">
+                              <a href="/">
                                 Version 4.1.2 has been launched
                               </a>
                             </p>
@@ -158,7 +158,7 @@ export default function Home() {
                           </li>
                           <li>
                             <p>
-                              <a href="notification-single.html">
+                              <a href="/">
                                 Video Generation has been released
                               </a>
                             </p>
@@ -166,7 +166,7 @@ export default function Home() {
                           </li>
                           <li>
                             <p>
-                              <a href="notification-single.html">
+                              <a href="/">
                                 Terms has been updated
                               </a>
                             </p>
@@ -316,7 +316,7 @@ export default function Home() {
                           )}
                           {user && user.email && (
                             <li>
-                              <a href="user-settings.html">
+                              <a href="/">
                                 <span className="icon">
                                   <img
                                     src="svg/setting.svg"
@@ -363,12 +363,12 @@ export default function Home() {
                 >
                   <span className="full_logo">
                     <img
-                      src="images/logo-desktop-full.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       className="desktop_logo"
                     />
                     <img
-                      src="images/logo-retina-full.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       className="retina_logo"
                     />
@@ -421,7 +421,7 @@ export default function Home() {
                     </li>
                     <li>
                       <a
-                        href="community-feed.html"
+                        href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="Community Feed"
@@ -438,7 +438,7 @@ export default function Home() {
                     </li>
                     <li>
                       <a
-                        href="personal-feed.html"
+                        href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="Personal Feed"
@@ -457,7 +457,7 @@ export default function Home() {
                     </li>
                     <li>
                       <a
-                        href="models.html"
+                        href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="Finetuned Models"
@@ -476,7 +476,7 @@ export default function Home() {
                   <ul className="group__list">
                     <li>
                       <a
-                        href="image-generation.html"
+                        href="/image"
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="Image Generation"
@@ -484,12 +484,12 @@ export default function Home() {
                         <span className="icon">
                           <img src="svg/image.svg" alt="" className="fn__svg" />
                         </span>
-                        <span className="text">Image Generation</span>
+                        <span className="text">Text</span>
                       </a>
                     </li>
                     <li>
                       <a
-                        href="ai-chat-bot.html"
+                        href="/image"
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="AI Chat Bot"
@@ -497,7 +497,33 @@ export default function Home() {
                         <span className="icon">
                           <img src="svg/chat.svg" alt="" className="fn__svg" />
                         </span>
-                        <span className="text">AI Chat Bot</span>
+                        <span className="text">Image</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/ai"
+                        className="fn__tooltip menu__item"
+                        data-position="right"
+                        title="AI Chat Bot"
+                      >
+                        <span className="icon">
+                          <img src="svg/chat.svg" alt="" className="fn__svg" />
+                        </span>
+                        <span className="text">Audio</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/ai"
+                        className="fn__tooltip menu__item"
+                        data-position="right"
+                        title="AI Chat Bot"
+                      >
+                        <span className="icon">
+                          <img src="svg/chat.svg" alt="" className="fn__svg" />
+                        </span>
+                        <span className="text">Video</span>
                       </a>
                     </li>
                   </ul>
@@ -508,7 +534,7 @@ export default function Home() {
                   <ul className="group__list">
                     <li>
                       <a
-                        href="pricing.html"
+                        href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="Pricing"
@@ -525,7 +551,7 @@ export default function Home() {
                     </li>
                     <li className="menu-item-has-children">
                       <a
-                        href="video-generation.html"
+                        href="/"
                         className="fn__tooltip menu__item"
                         title="FAQ &amp; Help"
                         data-position="right"
@@ -544,24 +570,24 @@ export default function Home() {
                       </a>
                       <ul className="sub-menu">
                         <li>
-                          <a href="documentation.html">
+                          <a href="/">
                             <span className="text">Documentation</span>
                           </a>
                         </li>
                         <li>
-                          <a href="faq.html">
+                          <a href="/">
                             <span className="text">FAQ</span>
                           </a>
                         </li>
                         <li>
-                          <a href="changelog.html">
+                          <a href="/">
                             <span className="text">
                               Changelog<span className="fn__sup">(4.1.2)</span>
                             </span>
                           </a>
                         </li>
                         <li>
-                          <a href="contact.html">
+                          <a href="/">
                             <span className="text">Contact Us</span>
                           </a>
                         </li>
@@ -605,6 +631,34 @@ export default function Home() {
 
                       <div className="techwave_fn_interactive_list">
                         <ul>
+                        <li>
+                            <div className="item">
+                              <a
+                                onClick={() => {
+                                  route.push("/image");
+                                }}
+                              >
+                                <span className="icon">
+                                  <img
+                                    src="svg/image.svg"
+                                    alt=""
+                                    className="fn__svg"
+                                  />
+                                </span>
+                                <h2 className="title">Text</h2>
+                                <p className="desc">
+                                  Files that include textual data. For now only Pdfs and text files, in future we will add all the necessary formats of text files
+                                </p>
+                                <span className="arrow">
+                                  <img
+                                    src="svg/arrow.svg"
+                                    alt=""
+                                    className="fn__svg"
+                                  />
+                                </span>
+                              </a>
+                            </div>
+                          </li>
                           <li>
                             <div className="item">
                               <a
@@ -619,12 +673,9 @@ export default function Home() {
                                     className="fn__svg"
                                   />
                                 </span>
-                                <h2 className="title">Image Generation</h2>
+                                <h2 className="title">Image</h2>
                                 <p className="desc">
-                                  This field of AI combines deep learning
-                                  algorithms and generative models to create new
-                                  images that resemble real-world photographs or
-                                  exhibit creative and imaginative qualities.
+                                  We process the image and give information in the four domains, image captioning, entity recognition, counting objects & Image based QnA 
                                 </p>
                                 <span className="arrow">
                                   <img
@@ -650,7 +701,7 @@ export default function Home() {
                                     className="fn__svg"
                                   />
                                 </span>
-                                <h2 className="title">AI Chat Bot</h2>
+                                <h2 className="title">Audio</h2>
                                 <p className="desc">
                                   An AI chatbot, short for artificial
                                   intelligence chatbot, is a computer program
@@ -668,12 +719,40 @@ export default function Home() {
                               </a>
                             </div>
                           </li>
+                          <li>
+                            <div className="item">
+                              <a
+                                onClick={() => {
+                                  route.push("/ai");
+                                }}
+                              >
+                                <span className="icon">
+                                  <img
+                                    src="svg/chat.svg"
+                                    alt=""
+                                    className="fn__svg"
+                                  />
+                                </span>
+                                <h2 className="title">Video</h2>
+                                <p className="desc">
+                                  Input are the Video files (urls for now) which are then processed by model and provide its text based summarisation and also QnA on video
+                                </p>
+                                <span className="arrow">
+                                  <img
+                                    src="svg/arrow.svg"
+                                    alt=""
+                                    className="fn__svg"
+                                  />
+                                </span>
+                              </a>
+                            </div>
+                          </li>
                         </ul>
                       </div>
                     </div>
                     <div className="section_right">
                       <div className="company_info">
-                        <img src="images/logo-desktop-full.png" alt="" />
+                        <img src="images/CCPD_proj_prev_ui.png" alt="" />
                         <p className="fn__animated_text">
                           The official server of TECH-AI, a text-to-image AI
                           where your imagination is the only limit. We’re
@@ -705,10 +784,10 @@ export default function Home() {
                   <div className="menu_items">
                     <ul>
                       <li>
-                        <a href="terms.html">Terms of Service</a>
+                        <a href="/">Terms of Service</a>
                       </li>
                       <li>
-                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="/">Privacy Policy</a>
                       </li>
                     </ul>
                   </div>

@@ -304,24 +304,24 @@ const Ai = () => {
                 >
                   <span class="full_logo">
                     <img
-                      src="images/logo-desktop-full.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="desktop_logo"
                     />
                     <img
-                      src="images/logo-retina-full.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="retina_logo"
                     />
                   </span>
                   <span class="short_logo">
                     <img
-                      src="images/logo-desktop-mini.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="desktop_logo"
                     />
                     <img
-                      src="images/logo-retina-mini.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="retina_logo"
                     />
@@ -401,7 +401,7 @@ const Ai = () => {
                   <ul class="group__list">
                     <li>
                       <a
-                        href="image-generation.html"
+                        href="/image"
                         class="fn__tooltip menu__item"
                         data-position="right"
                         title="Image Generation"
@@ -414,7 +414,7 @@ const Ai = () => {
                     </li>
                     <li>
                       <a
-                        href="ai-chat-bot.html"
+                        href="/ai"
                         class="fn__tooltip active menu__item"
                         data-position="right"
                         title="AI Chat Bot"
@@ -629,7 +629,7 @@ const Ai = () => {
                           <li class="group__item">
                             <div class="fn__chat_link active" href="#chat1">
                               <span class="text">Chat Bot Definition</span>
-                              <input type="text" value="Chat Bot Definition" />
+                              <input type="text" defaultvalue="Chat Bot Definition" value="Chat Bot Definition" />
                               <span class="options">
                                 <button class="trigger">
                                   <span></span>
@@ -662,7 +662,7 @@ const Ai = () => {
                           <li class="group__item">
                             <div class="fn__chat_link" href="#chat2">
                               <span class="text">Essay: Marketing</span>
-                              <input type="text" value="Essay: Marketing" />
+                              <input type="text" defaultvalue="Essay: Marketing" value="Essay: Marketing" />
                               <span class="options">
                                 <button class="trigger">
                                   <span></span>
@@ -697,6 +697,7 @@ const Ai = () => {
                               <span class="text">Future of Social Media</span>
                               <input
                                 type="text"
+                                deafaultvalue="Future of Social Media"
                                 value="Future of Social Media"
                               />
                               <span class="options">
@@ -731,7 +732,7 @@ const Ai = () => {
                           <li class="group__item">
                             <div class="fn__chat_link" href="#chat4">
                               <span class="text">Business Ideas</span>
-                              <input type="text" value="Business Ideas" />
+                              <input type="text" defaultvalue="Business Ideas" value="Business Ideas" />
                               <span class="options">
                                 <button class="trigger">
                                   <span></span>

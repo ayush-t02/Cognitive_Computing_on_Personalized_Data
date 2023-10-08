@@ -276,12 +276,12 @@ const Image = () => {
                 >
                   <span class="full_logo">
                     <img
-                      src="images/logo-desktop-full.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="desktop_logo"
                     />
                     <img
-                      src="images/logo-retina-full.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="retina_logo"
                       onClick={() => {
@@ -291,12 +291,12 @@ const Image = () => {
                   </span>
                   <span class="short_logo">
                     <img
-                      src="images/logo-desktop-mini.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="desktop_logo"
                     />
                     <img
-                      src="images/logo-retina-mini.png"
+                      src="images/CCPD_Text.png"
                       alt=""
                       class="retina_logo"
                     />
@@ -378,7 +378,7 @@ const Image = () => {
                   <ul class="group__list">
                     <li>
                       <a
-                        href="image-generation.html"
+                        href="/image"
                         class="fn__tooltip active menu__item"
                         data-position="right"
                         title="Image Generation"
@@ -391,7 +391,7 @@ const Image = () => {
                     </li>
                     <li>
                       <a
-                        href="ai-chat-bot.html"
+                        href="/ai"
                         class="fn__tooltip menu__item"
                         data-position="right"
                         title="AI Chat Bot"
