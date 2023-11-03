@@ -1,7 +1,7 @@
 import React from "react";
-import { loginSuccess } from "../reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { loginSuccess } from "../reducer";
 import { useRouter } from "next/router";
 import firebase from "firebase/compat/app";
 import { auth, db } from "../utils/Firebase";
@@ -81,32 +81,32 @@ const Signin = () => {
         });
     } catch (err) {
       console.error(err);
-      toast.error(err.message);
+      //toast.error(err.message);
     }
   };
   return (
     <>
-      <div class="techwave_fn_sign">
-        <div class="sign__content">
-          <h1 class="logo">Designed by Frenify</h1>
-          <form class="login">
-            <div class="form__content">
-              <div class="form__title">Sign In</div>
-              <div class="form__username">
+      <div className="techwave_fn_sign">
+        <div className="sign__content">
+          <h1 className="logo">Designed by Frenify</h1>
+          <form className="login">
+            <div className="form__content">
+              <div className="form__title">Sign In</div>
+              <div className="form__username">
                 <label for="user_login">Username or Email</label>
                 <input
                   type="text"
-                  class="input"
+                  className="input"
                   id="user_login"
                   autocapitalize="off"
                   autocomplete="username"
                   aria-describedby="login-message"
                 />
               </div>
-              <div class="form__pass">
-                <div class="pass_lab">
+              <div className="form__pass">
+                <div className="pass_lab">
                   <label for="user_password">Password</label>
-                  <a href="#">Forget Password?</a>
+                  <Link href="/">Forget Password?</Link>
                 </div>
                 <input
                   type="password"
@@ -115,24 +115,28 @@ const Signin = () => {
                   spellcheck="false"
                 />
               </div>
-              <div class="form__submit">
-                <label class="fn__submit">
+              <div className="form__submit">
+                <label className="fn__submit">
                   <input type="submit" name="submit" value="Sign In" />
                 </label>
               </div>
-              <div class="form__alternative">
-                <div class="fn__lined_text">
-                  <div class="line"></div>
-                  <div class="text">Or</div>
-                  <div class="line"></div>
+              <div className="form__alternative">
+                <div className="fn__lined_text">
+                  <div className="line"></div>
+                  <div className="text">Or</div>
+                  <div className="line"></div>
                 </div>
-                <a onClick={signInWithGoogle} class="techwave_fn_button">
+                <a
+                  href=""
+                  onClick={signInWithGoogle}
+                  className="techwave_fn_button"
+                >
                   <span>Sign in with Google</span>
                 </a>
               </div>
             </div>
           </form>
-          <div class="sign__desc">
+          <div className="sign__desc">
             <p>
               Not a member? <a href="sign-up.html">Sign Up</a>
             </p>

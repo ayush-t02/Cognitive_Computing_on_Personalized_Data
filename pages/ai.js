@@ -1,29 +1,101 @@
 import { useRouter } from "next/router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import React from "react";
-
+import { useDispatch } from "react-redux";
+import Header from "../components/Header";
+import Link from "next/link";
+import { useSelector } from "react-redux";
+import { loginSuccess } from "../reducer";
+import { auth } from "../utils/Firebase";
+import Chat from "../components/Chat";
+import InitialMessage from "../components/InitialMessage";
+import axios from "axios";
 const Ai = () => {
   const route = useRouter();
+  const { user } = useSelector((state) => state.user);
+  const [initialMessageState, setInitialMessage] = React.useState(true);
+  const dispatch = useDispatch();
+  const [input, setInput] = React.useState("");
+  const [message, setMessages] = React.useState([]);
+  const [navbar, setnavBar] = React.useState(false);
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await auth
+      .signOut()
+      .then(async () => {
+        window.localStorage.removeItem("cart");
+        reduxDispatch(logoutSuccess({}));
+        toast.success("Logout Success");
+        window.location.href = "/";
+        dispatch({
+          type: "REMOVE_FROM_CART",
+          payload: [],
+        });
+
+        // setInterval(() => {
+        //   window.location.reload();
+        // }, 1000);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+    window.location.reload();
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (user && user.email) {
+      setMessages((state) => [...state, input]);
+      setMessages((state) => [...state, "Loading..."]);
+      const response = await fetch("http://localhost:3005/chat_with_ai", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          message: input,
+        }),
+      });
+      let decoder = new TextDecoderStream();
+      const reader = response.body.pipeThrough(decoder).getReader();
+      var lastMessage = "";
+      setInitialMessage(false);
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages];
+          lastMessage = lastMessage + value;
+          updatedMessages[updatedMessages.length - 1] = lastMessage;
+          return updatedMessages;
+        });
+      }
+    } else {
+      toast.error("Please login");
+    }
+  };
   return (
     <>
       <div>
-        <div class="techwave_fn_fixedsub">
+        <div className="techwave_fn_fixedsub">
           <ul></ul>
         </div>
 
-        {/* <div class='techwave_fn_preloader'>
+        {/* <div className='techwave_fn_preloader'>
         <svg>
-          <circle class='first_circle' cx='50%' cy='50%' r='110'></circle>
-          <circle class='second_circle' cx='50%' cy='50%' r='110'></circle>
+          <circle className='first_circle' cx='50%' cy='50%' r='110'></circle>
+          <circle className='second_circle' cx='50%' cy='50%' r='110'></circle>
         </svg>
       </div> */}
 
-        <div class="techwave_fn_font">
-          <a class="font__closer_link fn__icon_button" href="#">
-            <img src="svg/close.svg" alt="" class="fn__svg" />
-          </a>
-          <div class="font__closer"></div>
-          <div class="font__dialog">
-            <h3 class="title">Font Options</h3>
+        <div className="techwave_fn_font">
+          <Link className="font__closer_link fn__icon_button" href="/">
+            <img src="svg/close.svg" alt="" className="fn__svg" />
+          </Link>
+          <div className="font__closer"></div>
+          <div className="font__dialog">
+            <h3 className="title">Font Options</h3>
             <label for="font_size">Font Size</label>
             <select id="font_size">
               <option value="10">10 px</option>
@@ -39,724 +111,537 @@ const Ai = () => {
               <option value="26">26 px</option>
               <option value="28">28 px</option>
             </select>
-            <a href="#" class="apply techwave_fn_button">
+            <Link href="/" className="apply techwave_fn_button">
               <span>Apply</span>
-            </a>
+            </Link>
           </div>
         </div>
 
-        <div class="techwave_fn_wrapper fn__has_sidebar">
-          <div class="techwave_fn_wrap">
-            <div class="techwave_fn_searchbar">
-              <div class="search__bar">
+        <div className="techwave_fn_wrapper fn__has_sidebar">
+          <div className="techwave_fn_wrap">
+            <div className="techwave_fn_searchbar">
+              <div className="search__bar">
                 <input
-                  class="search__input"
+                  className="search__input"
                   type="text"
                   placeholder="Search here..."
                 />
-                <img src="svg/search.svg" alt="" class="fn__svg search__icon" />
-                <a class="search__closer" href="#">
-                  <img src="svg/close.svg" alt="" class="fn__svg" />
-                </a>
+                <img
+                  src="svg/search.svg"
+                  alt=""
+                  className="fn__svg search__icon"
+                />
+                <Link className="search__closer" href="/">
+                  <img src="svg/close.svg" alt="" className="fn__svg" />
+                </Link>
               </div>
-              <div class="search__results">
-                <div class="results__title">Results</div>
-                <div class="results__list">
+              <div className="search__results">
+                <div className="results__title">Results</div>
+                <div className="results__list">
                   <ul>
                     <li>
-                      <a href="#">Artificial Intelligence</a>
+                      <Link href="/">Artificial Intelligence</Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link href="/">
                         Learn about the impact of AI on the financial industry
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link href="/">
                         Delve into the realm of AI-driven manufacturing
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link href="/">
                         Understand the ethical implications surrounding AI
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
 
-            <header class="techwave_fn_header">
-              <div class="header__left">
-                <div class="fn__token_info">
-                  <span class="token_summary">
-                    <span class="count">120</span>
-                    <span class="text">
-                      Tokens
-                      <br />
-                      Remain
-                    </span>
-                  </span>
-                  <a
-                    href="pricing.html"
-                    class="token_upgrade techwave_fn_button"
-                  >
-                    <span>Upgrade</span>
-                  </a>
-                  <div class="token__popup">
-                    Resets in <span>19 hours.</span>
-                    <br />
-                    Daily limit is <span>200 tokens</span>
-                  </div>
-                </div>
-              </div>
+            <Header
+              user={user}
+              handleLogout={handleLogout}
+              setnavBar={setnavBar}
+              navbar={navbar}
+            />
 
-              <div class="header__right">
-                <div class="fn__nav_bar">
-                  <div class="bar__item bar__item_search">
-                    <a href="#" class="item_opener">
-                      <img src="svg/search.svg" alt="" class="fn__svg" />
-                    </a>
-                    <div class="item_popup">
-                      <input type="text" placeholder="Search" />
-                    </div>
-                  </div>
+            <div className="techwave_fn_leftpanel">
+              <div className="mobile_extra_closer"></div>
 
-                  <div class="bar__item bar__item_notification has_notification">
-                    <a href="#" class="item_opener">
-                      <img src="svg/bell.svg" alt="" class="fn__svg" />
-                    </a>
-                    <div class="item_popup">
-                      <div class="ntfc_header">
-                        <h2 class="ntfc_title">Notifications</h2>
-                        <a href="notifications.html">View All</a>
-                      </div>
-                      <div class="ntfc_list">
-                        <ul>
-                          <li>
-                            <p>
-                              <a href="notification-single.html">
-                                Version 4.1.2 has been launched
-                              </a>
-                            </p>
-                            <span>34 Min Ago</span>
-                          </li>
-                          <li>
-                            <p>
-                              <a href="notification-single.html">
-                                Video Generation has been released
-                              </a>
-                            </p>
-                            <span>12 Apr</span>
-                          </li>
-                          <li>
-                            <p>
-                              <a href="notification-single.html">
-                                Terms has been updated
-                              </a>
-                            </p>
-                            <span>12 Apr</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="bar__item bar__item_fullscreen">
-                    <a href="#" class="item_opener">
-                      <img
-                        src="svg/fullscreen.svg"
-                        alt=""
-                        class="fn__svg f_screen"
-                      />
-                      <img
-                        src="svg/smallscreen.svg"
-                        alt=""
-                        class="fn__svg s_screen"
-                      />
-                    </a>
-                  </div>
-
-                  <div class="bar__item bar__item_language">
-                    <a href="#" class="item_opener">
-                      <img src="svg/language.svg" alt="" class="fn__svg" />
-                    </a>
-                    <div class="item_popup">
-                      <ul>
-                        <li>
-                          <span class="active">English</span>
-                        </li>
-                        <li>
-                          <a href="#">Spanish</a>
-                        </li>
-                        <li>
-                          <a href="#">French</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="bar__item bar__item_skin">
-                    <a href="#" class="item_opener">
-                      <img
-                        src="svg/sun.svg"
-                        alt=""
-                        class="fn__svg light_mode"
-                      />
-                      <img
-                        src="svg/moon.svg"
-                        alt=""
-                        class="fn__svg dark_mode"
-                      />
-                    </a>
-                  </div>
-
-                  <div class="bar__item bar__item_user">
-                    <a href="#" class="user_opener">
-                      <img src="images/user/user.jpg" alt="" />
-                    </a>
-                    <div class="item_popup">
-                      <div class="user_profile">
-                        <div class="user_img">
-                          <img src="images/user/user.jpg" alt="" />
-                        </div>
-                        <div class="user_info">
-                          <h2 class="user_name">
-                            Caden Smith<span>Free</span>
-                          </h2>
-                          <p>
-                            <a
-                              href="mailto:cadmail@gmail.com"
-                              class="user_email"
-                            >
-                              cadmail@gmail.com
-                            </a>
-                          </p>
-                        </div>
-                      </div>
-                      <div class="user_nav">
-                        <ul>
-                          <li>
-                            <a href="user-profile.html">
-                              <span class="icon">
-                                <img
-                                  src="svg/person.svg"
-                                  alt=""
-                                  class="fn__svg"
-                                />
-                              </span>
-                              <span class="text">Profile</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="user-settings.html">
-                              <span class="icon">
-                                <img
-                                  src="svg/setting.svg"
-                                  alt=""
-                                  class="fn__svg"
-                                />
-                              </span>
-                              <span class="text">Settings</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="user-billing.html">
-                              <span class="icon">
-                                <img
-                                  src="svg/billing.svg"
-                                  alt=""
-                                  class="fn__svg"
-                                />
-                              </span>
-                              <span class="text">Billing</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="sign-in.html">
-                              <span class="icon">
-                                <img
-                                  src="svg/logout.svg"
-                                  alt=""
-                                  class="fn__svg"
-                                />
-                              </span>
-                              <span class="text">Log Out</span>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </header>
-
-            <div class="techwave_fn_leftpanel">
-              <div class="mobile_extra_closer"></div>
-
-              <div class="leftpanel_logo">
-                <a
+              <div className="leftpanel_logo">
+                <Link
+                  href=""
                   onClick={() => {
                     route.push("/");
                   }}
-                  class="fn_logo"
+                  className="fn_logo"
                 >
-                  <span class="full_logo">
+                  <span className="full_logo">
                     <img
                       src="images/CCPD_Text.png"
                       alt=""
-                      class="desktop_logo"
+                      className="desktop_logo"
                     />
                     <img
                       src="images/CCPD_Text.png"
                       alt=""
-                      class="retina_logo"
-                    />
-                  </span>
-                  <span class="short_logo">
-                    <img
-                      src="images/CCPD_Text.png"
-                      alt=""
-                      class="desktop_logo"
-                    />
-                    <img
-                      src="images/CCPD_Text.png"
-                      alt=""
-                      class="retina_logo"
+                      className="retina_logo"
                     />
                   </span>
-                </a>
-                <a href="#" class="fn__closer fn__icon_button desktop_closer">
-                  <img src="svg/arrow.svg" alt="" class="fn__svg" />
-                </a>
-                <a href="#" class="fn__closer fn__icon_button mobile_closer">
-                  <img src="svg/arrow.svg" alt="" class="fn__svg" />
-                </a>
+                  <span className="short_logo">
+                    <img
+                      src="images/CCPD_Text.png"
+                      alt=""
+                      className="desktop_logo"
+                    />
+                    <img
+                      src="images/CCPD_Text.png"
+                      alt=""
+                      className="retina_logo"
+                    />
+                  </span>
+                </Link>
+                <Link
+                  href="/"
+                  className="fn__closer fn__icon_button desktop_closer"
+                >
+                  <img src="svg/arrow.svg" alt="" className="fn__svg" />
+                </Link>
+                <Link
+                  href="/"
+                  className="fn__closer fn__icon_button mobile_closer"
+                >
+                  <img src="svg/arrow.svg" alt="" className="fn__svg" />
+                </Link>
               </div>
 
-              <div class="leftpanel_content">
-                <div class="nav_group">
-                  <h2 class="group__title">Start Here</h2>
-                  <ul class="group__list">
+              <div className="leftpanel_content">
+                <div className="nav_group">
+                  <h2 className="group__title">Start Here</h2>
+                  <ul className="group__list">
                     <li>
-                      <a
+                      <Link
                         href="index-2.html"
-                        class="fn__tooltip menu__item"
+                        className="fn__tooltip menu__item"
                         data-position="right"
                         title="Home"
                       >
-                        <span class="icon">
-                          <img src="svg/home.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img src="svg/home.svg" alt="" className="fn__svg" />
                         </span>
-                        <span class="text">Home</span>
-                      </a>
+                        <span className="text">Home</span>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="community-feed.html"
-                        class="fn__tooltip menu__item"
+                        className="fn__tooltip menu__item"
                         data-position="right"
                         title="Community Feed"
                       >
-                        <span class="icon">
-                          <img src="svg/community.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img
+                            src="svg/community.svg"
+                            alt=""
+                            className="fn__svg"
+                          />
                         </span>
-                        <span class="text">Community Feed</span>
-                      </a>
+                        <span className="text">Community Feed</span>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="personal-feed.html"
-                        class="fn__tooltip menu__item"
+                        className="fn__tooltip menu__item"
                         data-position="right"
                         title="Personal Feed"
                       >
-                        <span class="icon">
-                          <img src="svg/person.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img
+                            src="svg/person.svg"
+                            alt=""
+                            className="fn__svg"
+                          />
                         </span>
-                        <span class="text">
-                          Personal Feed<span class="count">48</span>
+                        <span className="text">
+                          Personal Feed<span className="count">48</span>
                         </span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="models.html"
-                        class="fn__tooltip menu__item"
+                      <Link
+                        href="/"
+                        className="fn__tooltip menu__item"
                         data-position="right"
                         title="Finetuned Models"
                       >
-                        <span class="icon">
-                          <img src="svg/cube.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img src="svg/cube.svg" alt="" className="fn__svg" />
                         </span>
-                        <span class="text">Finetuned Models</span>
-                      </a>
+                        <span className="text">Finetuned Models</span>
+                      </Link>
                     </li>
                   </ul>
                 </div>
 
-                <div class="nav_group">
-                  <h2 class="group__title">User Tools</h2>
-                  <ul class="group__list">
+                <div className="nav_group">
+                  <h2 className="group__title">User Tools</h2>
+                  <ul className="group__list">
                     <li>
-                      <a
+                      <Link
                         href="/image"
-                        class="fn__tooltip menu__item"
+                        className="fn__tooltip menu__item"
                         data-position="right"
                         title="Image Generation"
                       >
-                        <span class="icon">
-                          <img src="svg/image.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img src="svg/image.svg" alt="" className="fn__svg" />
                         </span>
-                        <span class="text">Image Generation</span>
-                      </a>
+                        <span className="text">Image Generation</span>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="/ai"
-                        class="fn__tooltip active menu__item"
+                        className="fn__tooltip active menu__item"
                         data-position="right"
                         title="AI Chat Bot"
                       >
-                        <span class="icon">
-                          <img src="svg/chat.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img src="svg/chat.svg" alt="" className="fn__svg" />
                         </span>
-                        <span class="text">AI Chat Bot</span>
-                      </a>
+                        <span className="text">AI Chat Bot</span>
+                      </Link>
                     </li>
                   </ul>
                 </div>
 
-                <div class="nav_group">
-                  <h2 class="group__title">Support</h2>
-                  <ul class="group__list">
+                <div className="nav_group">
+                  <h2 className="group__title">Support</h2>
+                  <ul className="group__list">
                     <li>
-                      <a
-                        href="pricing.html"
-                        class="fn__tooltip menu__item"
+                      <Link
+                        href="/"
+                        className="fn__tooltip menu__item"
                         data-position="right"
                         title="Pricing"
                       >
-                        <span class="icon">
-                          <img src="svg/dollar.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img
+                            src="svg/dollar.svg"
+                            alt=""
+                            className="fn__svg"
+                          />
                         </span>
-                        <span class="text">Pricing</span>
-                      </a>
+                        <span className="text">Pricing</span>
+                      </Link>
                     </li>
-                    <li class="menu-item-has-children">
-                      <a
+                    <li className="menu-item-has-children">
+                      <Link
                         href="video-generation.html"
-                        class="fn__tooltip menu__item"
+                        className="fn__tooltip menu__item"
                         title="FAQ &amp; Help"
                         data-position="right"
                       >
-                        <span class="icon">
-                          <img src="svg/question.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img
+                            src="svg/question.svg"
+                            alt=""
+                            className="fn__svg"
+                          />
                         </span>
-                        <span class="text">FAQ &amp; Help</span>
-                        <span class="trigger">
-                          <img src="svg/arrow.svg" alt="" class="fn__svg" />
+                        <span className="text">FAQ &amp; Help</span>
+                        <span className="trigger">
+                          <img src="svg/arrow.svg" alt="" className="fn__svg" />
                         </span>
-                      </a>
-                      <ul class="sub-menu">
+                      </Link>
+                      <ul className="sub-menu">
                         <li>
-                          <a href="documentation.html">
-                            <span class="text">Documentation</span>
-                          </a>
+                          <Link href="/">
+                            <span className="text">Documentation</span>
+                          </Link>
                         </li>
                         <li>
-                          <a href="faq.html">
-                            <span class="text">FAQ</span>
-                          </a>
+                          <Link href="/">
+                            <span className="text">FAQ</span>
+                          </Link>
                         </li>
                         <li>
-                          <a href="changelog.html">
-                            <span class="text">
-                              Changelog<span class="fn__sup">(4.1.2)</span>
+                          <Link href="changelog.html">
+                            <span className="text">
+                              Changelog<span className="fn__sup">(4.1.2)</span>
                             </span>
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="contact.html">
-                            <span class="text">Contact Us</span>
-                          </a>
+                          <Link href="contact.html">
+                            <span className="text">Contact Us</span>
+                          </Link>
                         </li>
                         <li>
-                          <a href="index-3.html">
-                            <span class="text">Home #2</span>
-                          </a>
+                          <Link href="index-3.html">
+                            <span className="text">Home #2</span>
+                          </Link>
                         </li>
                       </ul>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="sign-in.html"
-                        class="fn__tooltip menu__item"
+                        className="fn__tooltip menu__item"
                         data-position="right"
                         title="Log Out"
                       >
-                        <span class="icon">
-                          <img src="svg/logout.svg" alt="" class="fn__svg" />
+                        <span className="icon">
+                          <img
+                            src="svg/logout.svg"
+                            alt=""
+                            className="fn__svg"
+                          />
                         </span>
-                        <span class="text">Log Out</span>
-                      </a>
+                        <span className="text">Log Out</span>
+                      </Link>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
 
-            <div class="techwave_fn_content">
-              <div class="techwave_fn_page">
-                <div class="techwave_fn_aichatbot_page fn__chatbot">
-                  <div class="chat__page">
-                    <div class="font__trigger">
-                      <span></span>
-                    </div>
-
-                    <div class="fn__title_holder">
-                      <div class="container">
-                        <h1 class="title">Chat Bot Definition</h1>
+            <div className="techwave_fn_content">
+              <div className="techwave_fn_page">
+                <div className="techwave_fn_aichatbot_page fn__chatbot">
+                  {initialMessageState ? (
+                    <InitialMessage
+                      initialMessageState={initialMessageState}
+                      handleSubmit={handleSubmit}
+                      setInput={setInput}
+                    />
+                  ) : (
+                    <div className="chat__page">
+                      <div className="font__trigger">
+                        <span></span>
                       </div>
-                    </div>
 
-                    <div class="container">
-                      <div class="chat__list">
-                        <div id="chat0" class="chat__item"></div>
-
-                        <div class="chat__item active" id="chat1">
-                          <div class="chat__box your__chat">
-                            <div class="author">
-                              <span>You</span>
-                            </div>
-                            <div class="chat">
-                              <p>What is a chat bot?</p>
-                            </div>
-                          </div>
-                          <div class="chat__box bot__chat">
-                            <div class="author">
-                              <span>Bot</span>
-                            </div>
-                            <div class="chat">
-                              <p>
-                                At the most basic level, a chatbot is a computer
-                                program that simulates and processes human
-                                conversation (either written or spoken),
-                                allowing humans to interact with digital devices
-                                as if they were communicating with a real
-                                person. Chatbots can be as simple as rudimentary
-                                programs that answer a simple query with a
-                                single-line response, or as sophisticated as
-                                digital assistants that learn and evolve to
-                                deliver increasing levels of personalization as
-                                they gather and process information.
-                              </p>
-                            </div>
-                          </div>
-                          <div class="chat__box your__chat">
-                            <div class="author">
-                              <span>You</span>
-                            </div>
-                            <div class="chat">
-                              <p>How do chatbots work?</p>
-                            </div>
-                          </div>
-                          <div class="chat__box bot__chat">
-                            <div class="author">
-                              <span>Bot</span>
-                            </div>
-                            <div class="chat">
-                              <p>
-                                Chatbots boost operational efficiency and bring
-                                cost savings to businesses while offering
-                                convenience and added services to internal
-                                employees and external customers. They allow
-                                companies to easily resolve many types of
-                                customer queries and issues while reducing the
-                                need for human interaction.
-                              </p>
-                            </div>
-                          </div>
+                      <div className="fn__title_holder">
+                        <div className="container">
+                          <h1 className="title">Chat Bot Definition</h1>
                         </div>
-
-                        <div class="chat__item" id="chat2"></div>
-
-                        <div class="chat__item" id="chat3"></div>
-
-                        <div class="chat__item" id="chat4"></div>
                       </div>
-                    </div>
-
-                    <div class="chat__comment">
-                      <div class="container">
-                        <div class="fn__chat_comment">
-                          <div class="new__chat">
-                            <p>
-                              Ask it questions, engage in discussions, or simply
-                              enjoy a friendly chat.
-                            </p>
+                      {message.map((item, idx) => {
+                        return (
+                          <Chat
+                            key={idx}
+                            // chat={message}
+                            initialMessageState={initialMessageState}
+                            idx={idx}
+                            handleSubmit={handleSubmit}
+                            setInput={setInput}
+                            message={item}
+                          />
+                        );
+                      })}
+                      <div className="chat__comment">
+                        <div className="container">
+                          <div className="fn__chat_comment">
+                            <div className="new__chat">
+                              <p>
+                                Ask it questions, engage in discussions, or
+                                simply enjoy a friendly chat.
+                              </p>
+                            </div>
+                            <textarea
+                              rows="1"
+                              className="fn__hidden_textarea"
+                              tabindex="-1"
+                            ></textarea>
+                            <textarea
+                              rows="1"
+                              onChange={(e) => {
+                                setInput(e.target.value);
+                              }}
+                              placeholder="Send a message..."
+                              id="fn__chat_textarea"
+                            ></textarea>
+                            <button
+                              onClick={handleSubmit}
+                              onKeyDown={(e) => {
+                                if (e.key == "Enter") {
+                                  handleSubmit(e);
+                                }
+                              }}
+                            >
+                              <img
+                                src="svg/enter.svg"
+                                alt=""
+                                className="fn__svg"
+                              />
+                            </button>
                           </div>
-                          <textarea
-                            rows="1"
-                            class="fn__hidden_textarea"
-                            tabindex="-1"
-                          ></textarea>
-                          <textarea
-                            rows="1"
-                            placeholder="Send a message..."
-                            id="fn__chat_textarea"
-                          ></textarea>
-                          <button>
-                            <img src="svg/enter.svg" alt="" class="fn__svg" />
-                          </button>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
-                  <div class="chat__sidebar">
-                    <div class="sidebar_header">
-                      <a href="#chat0" class="fn__new_chat_link">
-                        <span class="icon"></span>
-                        <span class="text">New Chat</span>
-                      </a>
+                  <div className="chat__sidebar">
+                    <div className="sidebar_header">
+                      <Link href="/chat0" className="fn__new_chat_link">
+                        <span className="icon"></span>
+                        <span className="text">New Chat</span>
+                      </Link>
                     </div>
-                    <div class="sidebar_content">
-                      <div class="chat__group new">
-                        <h2 class="group__title">Today</h2>
-                        <ul class="group__list">
-                          <li class="group__item">
-                            <div class="fn__chat_link active" href="#chat1">
-                              <span class="text">Chat Bot Definition</span>
-                              <input type="text" defaultvalue="Chat Bot Definition" value="Chat Bot Definition" />
-                              <span class="options">
-                                <button class="trigger">
+                    <div className="sidebar_content">
+                      <div className="chat__group new">
+                        <h2 className="group__title">Today</h2>
+                        <ul className="group__list">
+                          <li className="group__item">
+                            <div className="fn__chat_link active" href="/chat1">
+                              <span className="text">Chat Bot Definition</span>
+                              <input
+                                type="text"
+                                defaultvalue="Chat Bot Definition"
+                                value="Chat Bot Definition"
+                              />
+                              <span className="options">
+                                <button className="trigger">
                                   <span></span>
                                 </button>
-                                <span class="options__popup">
-                                  <span class="options__list">
-                                    <button class="edit">Edit</button>
-                                    <button class="delete">Delete</button>
+                                <span className="options__popup">
+                                  <span className="options__list">
+                                    <button className="edit">Edit</button>
+                                    <button className="delete">Delete</button>
                                   </span>
                                 </span>
                               </span>
-                              <span class="save_options">
-                                <button class="save">
+                              <span className="save_options">
+                                <button className="save">
                                   <img
                                     src="svg/check.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
-                                <button class="cancel">
+                                <button className="cancel">
                                   <img
                                     src="svg/close.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
                               </span>
                             </div>
                           </li>
-                          <li class="group__item">
-                            <div class="fn__chat_link" href="#chat2">
-                              <span class="text">Essay: Marketing</span>
-                              <input type="text" defaultvalue="Essay: Marketing" value="Essay: Marketing" />
-                              <span class="options">
-                                <button class="trigger">
+                          <li className="group__item">
+                            <div className="fn__chat_link" href="/chat2">
+                              <span className="text">Essay: Marketing</span>
+                              <input
+                                type="text"
+                                defaultvalue="Essay: Marketing"
+                                value="Essay: Marketing"
+                              />
+                              <span className="options">
+                                <button className="trigger">
                                   <span></span>
                                 </button>
-                                <span class="options__popup">
-                                  <span class="options__list">
-                                    <button class="edit">Edit</button>
-                                    <button class="delete">Delete</button>
+                                <span className="options__popup">
+                                  <span className="options__list">
+                                    <button className="edit">Edit</button>
+                                    <button className="delete">Delete</button>
                                   </span>
                                 </span>
                               </span>
-                              <span class="save_options">
-                                <button class="save">
+                              <span className="save_options">
+                                <button className="save">
                                   <img
                                     src="svg/check.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
-                                <button class="cancel">
+                                <button className="cancel">
                                   <img
                                     src="svg/close.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
                               </span>
                             </div>
                           </li>
-                          <li class="group__item">
-                            <div class="fn__chat_link" href="#chat3">
-                              <span class="text">Future of Social Media</span>
+                          <li className="group__item">
+                            <div className="fn__chat_link" href="/chat3">
+                              <span className="text">
+                                Future of Social Media
+                              </span>
                               <input
                                 type="text"
                                 deafaultvalue="Future of Social Media"
                                 value="Future of Social Media"
                               />
-                              <span class="options">
-                                <button class="trigger">
+                              <span className="options">
+                                <button className="trigger">
                                   <span></span>
                                 </button>
-                                <span class="options__popup">
-                                  <span class="options__list">
-                                    <button class="edit">Edit</button>
-                                    <button class="delete">Delete</button>
+                                <span className="options__popup">
+                                  <span className="options__list">
+                                    <button className="edit">Edit</button>
+                                    <button className="delete">Delete</button>
                                   </span>
                                 </span>
                               </span>
-                              <span class="save_options">
-                                <button class="save">
+                              <span className="save_options">
+                                <button className="save">
                                   <img
                                     src="svg/check.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
-                                <button class="cancel">
+                                <button className="cancel">
                                   <img
                                     src="svg/close.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
                               </span>
                             </div>
                           </li>
-                          <li class="group__item">
-                            <div class="fn__chat_link" href="#chat4">
-                              <span class="text">Business Ideas</span>
-                              <input type="text" defaultvalue="Business Ideas" value="Business Ideas" />
-                              <span class="options">
-                                <button class="trigger">
+                          <li className="group__item">
+                            <div className="fn__chat_link" href="/chat4">
+                              <span className="text">Business Ideas</span>
+                              <input
+                                type="text"
+                                defaultvalue="Business Ideas"
+                                value="Business Ideas"
+                              />
+                              <span className="options">
+                                <button className="trigger">
                                   <span></span>
                                 </button>
-                                <span class="options__popup">
-                                  <span class="options__list">
-                                    <button class="edit">Edit</button>
-                                    <button class="delete">Delete</button>
+                                <span className="options__popup">
+                                  <span className="options__list">
+                                    <button className="edit">Edit</button>
+                                    <button className="delete">Delete</button>
                                   </span>
                                 </span>
                               </span>
-                              <span class="save_options">
-                                <button class="save">
+                              <span className="save_options">
+                                <button className="save">
                                   <img
                                     src="svg/check.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
-                                <button class="cancel">
+                                <button className="cancel">
                                   <img
                                     src="svg/close.svg"
                                     alt=""
-                                    class="fn__svg"
+                                    className="fn__svg"
                                   />
                                 </button>
                               </span>
@@ -769,18 +654,18 @@ const Ai = () => {
                 </div>
               </div>
 
-              <footer class="techwave_fn_footer">
-                <div class="techwave_fn_footer_content">
-                  <div class="copyright">
+              <footer className="techwave_fn_footer">
+                <div className="techwave_fn_footer_content">
+                  <div className="copyright">
                     <p>2023© ITB23</p>
                   </div>
-                  <div class="menu_items">
+                  <div className="menu_items">
                     <ul>
                       <li>
-                        <a href="terms.html">Terms of Service</a>
+                        <Link href="terms.html">Terms of Service</Link>
                       </li>
                       <li>
-                        <a href="privacy.html">Privacy Policy</a>
+                        <Link href="privacy.html">Privacy Policy</Link>
                       </li>
                     </ul>
                   </div>
@@ -790,6 +675,7 @@ const Ai = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

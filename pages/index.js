@@ -4,13 +4,20 @@ import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import React from "react";
 import { useSelector } from "react-redux";
 import { auth } from "../utils/Firebase";
+import Header from "../components/Header";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 export default function Home() {
   const route = useRouter();
+  
   const { user } = useSelector((state) => state.user);
   const [navbar, setnavBar] = React.useState(false);
+  const dispatch = useDispatch();
+
   const handleLogout = async (e) => {
     e.preventDefault();
     await auth
@@ -53,6 +60,7 @@ export default function Home() {
             <div className="techwave_fn_searchbar">
               <div className="search__bar">
                 <input
+                  
                   className="search__input"
                   type="text"
                   placeholder="Search here..."
@@ -60,302 +68,51 @@ export default function Home() {
                 <img
                   src="../svg/search.svg"
                   alt=""
+                  
                   className="fn__svg search__icon"
                 />
-                <a className="search__closer" href="#">
+                <Link className="search__closer" href="/">
                   <img src="svg/close.svg" alt="" className="fn__svg" />
-                </a>
+                </Link>
               </div>
               <div className="search__results">
                 <div className="results__title">Results</div>
                 <div className="results__list">
                   <ul>
                     <li>
-                      <a href="#">Artificial Intelligence</a>
+                      <Link href="/">Artificial Intelligence</Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link href="/">
                         Learn about the impact of AI on the financial industry
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link href="/">
                         Delve into the realm of AI-driven manufacturing
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="#">
+                      <Link href="/">
                         Understand the ethical implications surrounding AI
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-
-            <header className="techwave_fn_header">
-              <div className="header__left">
-                <div className="fn__token_info">
-                  <span className="token_summary">
-                    <span className="count">120</span>
-                    <span className="text">
-                      Tokens
-                      <br />
-                      Remain
-                    </span>
-                  </span>
-                  <a
-                    href="/"
-                    className="token_upgrade techwave_fn_button"
-                  >
-                    <span>Upgrade</span>
-                  </a>
-                  <div className="token__popup">
-                    Resets in <span>19 hours.</span>
-                    <br />
-                    Daily limit is <span>200 tokens</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="header__right">
-                <div className="fn__nav_bar">
-                  <div className="bar__item bar__item_search">
-                    <a
-                      href="#"
-                      className="item_opener fn__tooltip"
-                      title="Search"
-                    >
-                      <img src="svg/search.svg" alt="" className="fn__svg" />
-                    </a>
-                    <div className="item_popup" data-position="right">
-                      <input type="text" placeholder="Search" />
-                    </div>
-                  </div>
-
-                  <div className="bar__item bar__item_notification has_notification">
-                    <a
-                      href="#"
-                      className="item_opener fn__tooltip"
-                      title="Notifications"
-                    >
-                      <img src="svg/bell.svg" alt="" className="fn__svg" />
-                    </a>
-                    <div className="item_popup" data-position="right">
-                      <div className="ntfc_header">
-                        <h2 className="ntfc_title">Notifications</h2>
-                        <a href="/">View All</a>
-                      </div>
-                      <div className="ntfc_list">
-                        <ul>
-                          <li>
-                            <p>
-                              <a href="/">
-                                Version 4.1.2 has been launched
-                              </a>
-                            </p>
-                            <span>34 Min Ago</span>
-                          </li>
-                          <li>
-                            <p>
-                              <a href="/">
-                                Video Generation has been released
-                              </a>
-                            </p>
-                            <span>12 Apr</span>
-                          </li>
-                          <li>
-                            <p>
-                              <a href="/">
-                                Terms has been updated
-                              </a>
-                            </p>
-                            <span>12 Apr</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bar__item bar__item_fullscreen">
-                    <a
-                      href="#"
-                      className="item_opener fn__tooltip"
-                      title="Full Screen"
-                    >
-                      <img
-                        src="svg/fullscreen.svg"
-                        alt=""
-                        className="fn__svg f_screen"
-                      />
-                      <img
-                        src="svg/smallscreen.svg"
-                        alt=""
-                        className="fn__svg s_screen"
-                      />
-                    </a>
-                  </div>
-
-                  <div className="bar__item bar__item_language">
-                    <a
-                      href="#"
-                      className="item_opener fn__tooltip"
-                      title="Language"
-                    >
-                      <img src="svg/language.svg" alt="" className="fn__svg" />
-                    </a>
-                    <div className="item_popup" data-position="right">
-                      <ul>
-                        <li>
-                          <span className="active">English</span>
-                        </li>
-                        <li>
-                          <a href="#">Spanish</a>
-                        </li>
-                        <li>
-                          <a href="#">French</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="bar__item bar__item_skin">
-                    <a
-                      href="#"
-                      className="item_opener fn__tooltip"
-                      title="Dark/Light"
-                    >
-                      <img
-                        src="svg/sun.svg"
-                        alt=""
-                        className="fn__svg light_mode"
-                      />
-                      <img
-                        src="svg/moon.svg"
-                        alt=""
-                        className="fn__svg dark_mode"
-                      />
-                    </a>
-                  </div>
-
-                  <div className="bar__item bar__item_user">
-                    {user && user.email ? (
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setnavBar((prev) => !prev);
-                        }}
-                        href="#"
-                        className="user_opener fn__tooltip"
-                        title="User Profile"
-                      >
-                        <img
-                          referrerPolicy="no-referrer"
-                          src={user.url}
-                          alt=""
-                        />
-                      </a>
-                    ) : (
-                      <Link
-                        href="/signin"
-                        className="token_upgrade techwave_fn_button"
-                      >
-                        <span>Login</span>
-                      </Link>
-                    )}
-                    <div
-                      style={{
-                        opacity: !navbar ? "0" : "1",
-                        visibility: !navbar ? "hidden" : "visible",
-                      }}
-                      className="item_popup"
-                      data-position="right"
-                    >
-                      <div className="user_profile">
-                        {user && user.email && (
-                          <div className="user_img">
-                            <img
-                              referrerPolicy="no-referrer"
-                              src={user.url}
-                              alt=""
-                            />
-                          </div>
-                        )}
-                        {user && user.email && (
-                          <div className="user_info">
-                            <h2 className="user_name">
-                              {user.name}
-                              {/* <span>Free</span> */}
-                            </h2>
-                            <p>
-                              <a
-                                href="mailto:tripathiayush23@gmail.com"
-                                className="user_email"
-                              >
-                                {user.email}
-                              </a>
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                      <div className="user_nav">
-                        <ul>
-                          {user && user.email && (
-                            <li>
-                              <a href="user-profile.html">
-                                <span className="icon">
-                                  <img
-                                    src="svg/person.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </span>
-                                <span className="text">Profile</span>
-                              </a>
-                            </li>
-                          )}
-                          {user && user.email && (
-                            <li>
-                              <a href="/">
-                                <span className="icon">
-                                  <img
-                                    src="svg/setting.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </span>
-                                <span className="text">Settings</span>
-                              </a>
-                            </li>
-                          )}
-
-                          {user && user.email && (
-                            <li>
-                              <a onClick={handleLogout}>
-                                <span className="icon">
-                                  <img
-                                    src="svg/logout.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </span>
-                                <span className="text">Log Out</span>
-                              </a>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </header>
-
+            <Header
+              user={user}
+              handleLogout={handleLogout}
+              setnavBar={setnavBar}
+              navbar={navbar}
+            />
             <div className="techwave_fn_leftpanel">
               <div className="mobile_extra_closer"></div>
 
               <div className="leftpanel_logo">
-                <a
+                <Link
+                  href=""
                   onClick={() => {
                     route.push("/");
                   }}
@@ -385,19 +142,19 @@ export default function Home() {
                       className="retina_logo"
                     />
                   </span>
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  href="/"
                   className="fn__closer fn__icon_button desktop_closer"
                 >
                   <img src="svg/arrow.svg" alt="" className="fn__svg" />
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  href="/"
                   className="fn__closer fn__icon_button mobile_closer"
                 >
                   <img src="svg/arrow.svg" alt="" className="fn__svg" />
-                </a>
+                </Link>
               </div>
 
               <div className="leftpanel_content">
@@ -405,7 +162,8 @@ export default function Home() {
                   <h2 className="group__title">Start Here</h2>
                   <ul className="group__list">
                     <li>
-                      <a
+                      <Link
+                        href=""
                         onClick={() => {
                           route.push("/");
                         }}
@@ -417,10 +175,10 @@ export default function Home() {
                           <img src="svg/home.svg" alt="" className="fn__svg" />
                         </span>
                         <span className="text">Home</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -434,10 +192,10 @@ export default function Home() {
                           />
                         </span>
                         <span className="text">Community Feed</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -453,10 +211,10 @@ export default function Home() {
                         <span className="text">
                           Personal Feed<span className="count">48</span>
                         </span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -466,7 +224,7 @@ export default function Home() {
                           <img src="svg/cube.svg" alt="" className="fn__svg" />
                         </span>
                         <span className="text">Finetuned Models</span>
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -475,8 +233,8 @@ export default function Home() {
                   <h2 className="group__title">User Tools</h2>
                   <ul className="group__list">
                     <li>
-                      <a
-                        href="/image"
+                      <Link
+                        href="/ai"
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="Image Generation"
@@ -485,10 +243,10 @@ export default function Home() {
                           <img src="svg/image.svg" alt="" className="fn__svg" />
                         </span>
                         <span className="text">Text</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="/image"
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -498,10 +256,10 @@ export default function Home() {
                           <img src="svg/chat.svg" alt="" className="fn__svg" />
                         </span>
                         <span className="text">Image</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="/ai"
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -511,10 +269,10 @@ export default function Home() {
                           <img src="svg/chat.svg" alt="" className="fn__svg" />
                         </span>
                         <span className="text">Audio</span>
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         href="/ai"
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -524,7 +282,7 @@ export default function Home() {
                           <img src="svg/chat.svg" alt="" className="fn__svg" />
                         </span>
                         <span className="text">Video</span>
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -533,7 +291,7 @@ export default function Home() {
                   <h2 className="group__title">Support</h2>
                   <ul className="group__list">
                     <li>
-                      <a
+                      <Link
                         href="/"
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -547,10 +305,10 @@ export default function Home() {
                           />
                         </span>
                         <span className="text">Pricing</span>
-                      </a>
+                      </Link>
                     </li>
                     <li className="menu-item-has-children">
-                      <a
+                      <Link
                         href="/"
                         className="fn__tooltip menu__item"
                         title="FAQ &amp; Help"
@@ -567,34 +325,35 @@ export default function Home() {
                         <span className="trigger">
                           <img src="svg/arrow.svg" alt="" className="fn__svg" />
                         </span>
-                      </a>
+                      </Link>
                       <ul className="sub-menu">
                         <li>
-                          <a href="/">
+                          <Link href="/">
                             <span className="text">Documentation</span>
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="/">
+                          <Link href="/">
                             <span className="text">FAQ</span>
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="/">
+                          <Link href="/">
                             <span className="text">
                               Changelog<span className="fn__sup">(4.1.2)</span>
                             </span>
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="/">
+                          <Link href="/">
                             <span className="text">Contact Us</span>
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                     </li>
                     <li>
-                      <a
+                      <Link
+                        href=""
                         onClick={handleLogout}
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -608,7 +367,7 @@ export default function Home() {
                           />
                         </span>
                         <span className="text">Log Out</span>
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -631,11 +390,12 @@ export default function Home() {
 
                       <div className="techwave_fn_interactive_list">
                         <ul>
-                        <li>
+                          <li>
                             <div className="item">
-                              <a
+                              <Link
+                                href="/ai"
                                 onClick={() => {
-                                  route.push("/image");
+                                  route.push("/ai");
                                 }}
                               >
                                 <span className="icon">
@@ -647,7 +407,9 @@ export default function Home() {
                                 </span>
                                 <h2 className="title">Text</h2>
                                 <p className="desc">
-                                  Files that include textual data. For now only Pdfs and text files, in future we will add all the necessary formats of text files
+                                  Files that include textual data. For now only
+                                  Pdfs and text files, in future we will add all
+                                  the necessary formats of text files
                                 </p>
                                 <span className="arrow">
                                   <img
@@ -656,12 +418,13 @@ export default function Home() {
                                     className="fn__svg"
                                   />
                                 </span>
-                              </a>
+                              </Link>
                             </div>
                           </li>
                           <li>
                             <div className="item">
-                              <a
+                              <Link
+                                href="/image"
                                 onClick={() => {
                                   route.push("/image");
                                 }}
@@ -675,7 +438,10 @@ export default function Home() {
                                 </span>
                                 <h2 className="title">Image</h2>
                                 <p className="desc">
-                                  We process the image and give information in the four domains, image captioning, entity recognition, counting objects & Image based QnA 
+                                  We process the image and give information in
+                                  the four domains, image captioning, entity
+                                  recognition, counting objects & Image based
+                                  QnA
                                 </p>
                                 <span className="arrow">
                                   <img
@@ -684,12 +450,13 @@ export default function Home() {
                                     className="fn__svg"
                                   />
                                 </span>
-                              </a>
+                              </Link>
                             </div>
                           </li>
                           <li>
                             <div className="item">
-                              <a
+                              <Link
+                                href=""
                                 onClick={() => {
                                   route.push("/ai");
                                 }}
@@ -716,12 +483,13 @@ export default function Home() {
                                     className="fn__svg"
                                   />
                                 </span>
-                              </a>
+                              </Link>
                             </div>
                           </li>
                           <li>
                             <div className="item">
-                              <a
+                              <Link
+                                href=""
                                 onClick={() => {
                                   route.push("/ai");
                                 }}
@@ -735,7 +503,9 @@ export default function Home() {
                                 </span>
                                 <h2 className="title">Video</h2>
                                 <p className="desc">
-                                  Input are the Video files (urls for now) which are then processed by model and provide its text based summarisation and also QnA on video
+                                  Input are the Video files (urls for now) which
+                                  are then processed by model and provide its
+                                  text based summarisation and also QnA on video
                                 </p>
                                 <span className="arrow">
                                   <img
@@ -744,7 +514,7 @@ export default function Home() {
                                     className="fn__svg"
                                   />
                                 </span>
-                              </a>
+                              </Link>
                             </div>
                           </li>
                         </ul>
@@ -784,10 +554,10 @@ export default function Home() {
                   <div className="menu_items">
                     <ul>
                       <li>
-                        <a href="/">Terms of Service</a>
+                        <Link href="/">Terms of Service</Link>
                       </li>
                       <li>
-                        <a href="/">Privacy Policy</a>
+                        <Link href="/">Privacy Policy</Link>
                       </li>
                     </ul>
                   </div>
