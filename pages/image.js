@@ -5,11 +5,13 @@ import { useDispatch } from "react-redux";
 import Link from "next/router";
 import { useSelector } from "react-redux";
 import { auth } from "../utils/Firebase";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Image = () => {
   const route = useRouter();
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const reduxDispatch = useDispatch();
   const [navbar, setnavBar] = React.useState(false);
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -40,13 +42,6 @@ const Image = () => {
         <div className="techwave_fn_fixedsub">
           <ul></ul>
         </div>
-
-        {/* <div className="techwave_fn_preloader">
-        <svg>
-          <circle className="first_circle" cx="50%" cy="50%" r="110"></circle>
-          <circle className="second_circle" cx="50%" cy="50%" r="110"></circle>
-        </svg>
-      </div> */}
 
         <div className="techwave_fn_wrapper fn__has_sidebar">
           <div className="techwave_fn_wrap">

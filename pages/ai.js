@@ -19,6 +19,7 @@ const Ai = () => {
   const [input, setInput] = React.useState("");
   const [message, setMessages] = React.useState([]);
   const [navbar, setnavBar] = React.useState(false);
+  const reduxDispatch = useDispatch();
   const handleLogout = async (e) => {
     e.preventDefault();
     await auth

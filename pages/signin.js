@@ -18,7 +18,7 @@ const Signin = () => {
     }
   }, [user]);
   const googleProvider = new firebase.auth.GoogleAuthProvider();
-
+  const reduxDispatch = useDispatch();
   const signInWithGoogle = async (e) => {
     e.preventDefault();
     try {

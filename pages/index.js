@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
+import { logoutSuccess } from "../reducer";
 import React from "react";
 import { useSelector } from "react-redux";
 import { auth } from "../utils/Firebase";
@@ -24,7 +24,7 @@ export default function Home() {
       .signOut()
       .then(async () => {
         window.localStorage.removeItem("cart");
-        reduxDispatch(logoutSuccess({}));
+        dispatch(logoutSuccess({}));
         toast.success("Logout Success");
         window.location.href = "/";
         dispatch({
