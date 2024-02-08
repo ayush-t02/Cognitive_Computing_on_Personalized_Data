@@ -177,7 +177,7 @@ export default function Home() {
                         <span className="text">Home</span>
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link
                         href="/"
                         className="fn__tooltip menu__item"
@@ -225,7 +225,7 @@ export default function Home() {
                         </span>
                         <span className="text">Finetuned Models</span>
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
 
@@ -290,7 +290,7 @@ export default function Home() {
                 <div className="nav_group">
                   <h2 className="group__title">Support</h2>
                   <ul className="group__list">
-                    <li>
+                    {/* <li>
                       <Link
                         href="/"
                         className="fn__tooltip menu__item"
@@ -350,7 +350,7 @@ export default function Home() {
                           </Link>
                         </li>
                       </ul>
-                    </li>
+                    </li> */}
                     <li>
                       <Link
                         href=""
