@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import Header from "../components/Header";
 import { useDispatch } from "react-redux";
-import Link from "next/router";
+import Link from "next/link";
 import { useSelector } from "react-redux";
 import { auth } from "../utils/Firebase";
 import { toast, ToastContainer } from "react-toastify";
@@ -100,10 +100,10 @@ const Image = () => {
 
               <div className="leftpanel_logo">
                 <Link
-                  href=""
-                  onClick={() => {
-                    route.push("/");
-                  }}
+                  href="/"
+                  // onClick={() => {
+                  //   route.push("/");
+                  // }}
                   className="fn_logo"
                 >
                   <span className="full_logo">
@@ -155,9 +155,9 @@ const Image = () => {
                     <li>
                       <Link
                         href="/"
-                        onClick={() => {
-                          route.push("/");
-                        }}
+                        // onClick={() => {
+                        //   route.push("/");
+                        // }}
                         className="fn__tooltip menu__item"
                         data-position="right"
                         title="Home"
@@ -1677,7 +1677,7 @@ const Image = () => {
                   <div className="generation__sidebar">
                     <div className="sidebar_model">
                       <div className="fn__select_model">
-                        <Link className="model_open">
+                        <Link className="model_open" href="">
                           <img
                             className="user_img"
                             src="images/user/user.jpg"

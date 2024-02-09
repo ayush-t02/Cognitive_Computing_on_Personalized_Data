@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 export default function Home() {
   const route = useRouter();
-  
+
   const { user } = useSelector((state) => state.user);
   const [navbar, setnavBar] = React.useState(false);
   const dispatch = useDispatch();
@@ -60,7 +60,6 @@ export default function Home() {
             <div className="techwave_fn_searchbar">
               <div className="search__bar">
                 <input
-                  
                   className="search__input"
                   type="text"
                   placeholder="Search here..."
@@ -68,7 +67,6 @@ export default function Home() {
                 <img
                   src="../svg/search.svg"
                   alt=""
-                  
                   className="fn__svg search__icon"
                 />
                 <Link className="search__closer" href="/">
@@ -112,10 +110,10 @@ export default function Home() {
 
               <div className="leftpanel_logo">
                 <Link
-                  href=""
-                  onClick={() => {
-                    route.push("/");
-                  }}
+                  href="/"
+                  // onClick={() => {
+                  //   route.push("/");
+                  // }}
                   className="fn_logo"
                 >
                   <span className="full_logo">
@@ -163,7 +161,7 @@ export default function Home() {
                   <ul className="group__list">
                     <li>
                       <Link
-                        href=""
+                        href="/"
                         onClick={() => {
                           route.push("/");
                         }}
@@ -353,7 +351,7 @@ export default function Home() {
                     </li> */}
                     <li>
                       <Link
-                        href=""
+                        href="/"
                         onClick={handleLogout}
                         className="fn__tooltip menu__item"
                         data-position="right"
@@ -456,7 +454,7 @@ export default function Home() {
                           <li>
                             <div className="item">
                               <Link
-                                href=""
+                                href="/ai"
                                 onClick={() => {
                                   route.push("/ai");
                                 }}
@@ -489,7 +487,7 @@ export default function Home() {
                           <li>
                             <div className="item">
                               <Link
-                                href=""
+                                href="/ai"
                                 onClick={() => {
                                   route.push("/ai");
                                 }}

@@ -11,7 +11,6 @@ const Chat = ({
 
   return (
     <>
-      {/* {console.log(messageArr, "messageArr")} */}
       <div>
         <div className="container">
           <div className="chat__list">

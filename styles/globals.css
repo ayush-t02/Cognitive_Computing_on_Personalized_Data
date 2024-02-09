@@ -210,9 +210,9 @@ table td {
 
 code,
 pre {
-  padding: 10px;
-  border-left: 3px solid var(--techwave-main-color);
-  border-bottom: 1px solid transparent;
+  /* padding: 10px; */
+  /* border-left: 3px solid var(--techwave-main-color); */
+  /* border-bottom: 1px solid transparent; */
   background: var(--techwave-some-a-bg-color);
   overflow-x: auto;
 }
@@ -6331,7 +6331,7 @@ a.fn__like.no_border .fn__svg {
 
 .fn__chat_comment button {
   position: absolute;
-  width: 60px;
+  width: 51px;
   height: 44px;
   bottom: 8px;
   right: 8px;
@@ -6350,6 +6350,9 @@ a.fn__like.no_border .fn__svg {
   align-items: center;
   justify-content: center;
   transition: 0.3s;
+}
+.fn__chat_comment .btn2 {
+  right: 65px;
 }
 
 .fn__model_item.new .item .add:after,
