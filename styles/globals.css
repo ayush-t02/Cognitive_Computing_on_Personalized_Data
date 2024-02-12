@@ -6328,7 +6328,14 @@ a.fn__like.no_border .fn__svg {
 .techwave_fn_image_generation_page .header_bottom textarea:focus {
   border-color: var(--techwave-main-color);
 }
-
+:where(.css-dev-only-do-not-override-pr0fja).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  position: relative;
+  background-color: #0f0e11;
+  color: #7b7783;
+  border: 1px solid #0f0e11;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
 .fn__chat_comment button {
   position: absolute;
   width: 51px;
@@ -6353,6 +6360,9 @@ a.fn__like.no_border .fn__svg {
 }
 .fn__chat_comment .btn2 {
   right: 65px;
+}
+.fn__chat_comment .btn3 {
+  right: 125px;
 }
 
 .fn__model_item.new .item .add:after,

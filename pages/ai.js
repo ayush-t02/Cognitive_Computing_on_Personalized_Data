@@ -1,4 +1,7 @@
+import { Select, Space } from "antd";
 import { useRouter } from "next/router";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,7 +10,7 @@ import { useDispatch } from "react-redux";
 import Header from "../components/Header";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { loginSuccess } from "../reducer";
+import { logoutSuccess } from "../reducer";
 import { auth } from "../utils/Firebase";
 import Chat from "../components/Chat";
 import InitialMessage from "../components/InitialMessage";
@@ -17,59 +20,151 @@ const Ai = () => {
   const { user } = useSelector((state) => state.user);
   const [initialMessageState, setInitialMessage] = React.useState(true);
   const dispatch = useDispatch();
+  const [open, setopen] = React.useState(false);
+  const [image, setimage] = React.useState({
+    data: "",
+    display: false,
+  });
+  const [_select, setSelect] = React.useState("none");
+  const [load, setload] = React.useState(false);
   const [input, setInput] = React.useState("");
   const [message, setMessages] = React.useState([]);
   const [navbar, setnavBar] = React.useState(false);
   const reduxDispatch = useDispatch();
   const inputFile = React.useRef(null);
-
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+    setSelect(value);
+  };
   const handlefile = async (e) => {
     const files = inputFile.current.files;
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
       chunkOverlap: 200,
     });
-    function readFileAsText(files) {
-      return new Promise((resolve, reject) => {
-        var setcontent = [];
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const reader = new FileReader();
-          reader.onload = async (event) => {
-            try {
-              const content = event.target.result;
-              const output = await splitter.createDocuments([content]);
-              setcontent = setcontent.concat(output);
+    console.log(files[0]);
+    if (files[0].type == "audio/mpeg") {
+      const formData = new FormData();
+      formData.append("audio", files[0]);
+      setInitialMessage(false);
+      setMessages((state) => [
+        ...state,
+        "Elaborate the following file " + files[0].name,
+      ]);
+      // setMessages((state) => [...state, "Loading..."]);
+      console.log(formData, "formData");
+      await fetch(`http://127.0.0.1:5001/api/audioToText`, {
+        method: "POST",
 
-              if (i == files.length - 1) {
-                resolve(setcontent);
-              }
-            } catch (error) {
-              console.error(`Error loading content from ${file.name}:`, error);
-            }
-          };
-          reader.onerror = () => {
-            reject(reader.error); // Reject with the error
-          };
-          // Read the file as text
-          reader.readAsText(file);
-        }
-      });
-    }
-    readFileAsText(files).then(async (content) => {
-      console.log(content);
-      fetch("http://localhost:3005/set_file_to_pinecone", {
+        body: formData,
+      })
+        .then(async (response) => {
+          var data = await response.json();
+          console.log(data.transcription);
+
+          setMessages((state) => [...state, data.transcription]);
+
+          toast.success("File uploaded successfully");
+        })
+        .catch((err) => {
+          return console.log("error", err);
+        });
+    } else if (
+      files[0].type == "image/png" ||
+      files[0].type == "image/jpeg" ||
+      files[0].type == "image/jpg"
+    ) {
+      console.log(files);
+      const formData = new FormData();
+      formData.append("image", files[0]);
+      console.log(formData, "formData");
+      await fetch(`http://127.0.0.1:5001/api/imageToText`, {
         method: "POST",
         headers: {
-          "Content-type": "application/json",
+          Accept: "*/*",
         },
-        body: JSON.stringify({
-          email: user.email,
-          combinedContent: content,
-        }),
+        body: formData,
+      })
+        .then(async (response) => {
+          let data = await response.text();
+          console.log(data);
+          setMessages((state) => [
+            ...state,
+            "Elaborate the following file " + files[0].name,
+          ]);
+          setMessages((state) => [...state, "Loading..."]);
+          toast.success("File uploaded successfully");
+          const res = await fetch("http://localhost:3005/image-text-chat", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({ data: data, type: "image" }),
+          });
+          let decoder = new TextDecoderStream();
+          const reader = res.body.pipeThrough(decoder).getReader();
+          var lastMessage = "";
+          setInitialMessage(false);
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            setMessages((prevMessages) => {
+              const updatedMessages = [...prevMessages];
+              lastMessage = lastMessage + value;
+              updatedMessages[updatedMessages.length - 1] = lastMessage;
+              return updatedMessages;
+            });
+          }
+        })
+        .catch((err) => {
+          return console.log("error", err);
+        });
+    } else {
+      function readFileAsText(files) {
+        return new Promise((resolve, reject) => {
+          var setcontent = [];
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+              try {
+                const content = event.target.result;
+                const output = await splitter.createDocuments([content]);
+                setcontent = setcontent.concat(output);
+
+                if (i == files.length - 1) {
+                  resolve(setcontent);
+                }
+              } catch (error) {
+                console.error(
+                  `Error loading content from ${file.name}:`,
+                  error
+                );
+              }
+            };
+            reader.onerror = () => {
+              reject(reader.error); // Reject with the error
+            };
+            // Read the file as text
+            reader.readAsText(file);
+          }
+        });
+      }
+      readFileAsText(files).then(async (content) => {
+        console.log(content);
+        fetch("http://localhost:3005/set_file_to_pinecone", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            email: user.email,
+            combinedContent: content,
+          }),
+        });
+        toast.success("File uploaded successfully");
       });
-      toast.success("File uploaded successfully");
-    });
+    }
   };
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -97,6 +192,56 @@ const Ai = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (user && user.email) {
+      console.log(_select);
+      setimage({ data: "", display: false });
+      if (_select == "textToImage") {
+        setload(true);
+        setMessages((state) => [...state, input]);
+        setMessages((state) => [...state, "Loading..."]);
+        setInitialMessage(false);
+        await fetch(`http://127.0.0.1:5001/api/textToImage`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(input),
+        }).then(async (data) => {
+          console.log(data);
+
+          setload(false);
+          const blob = await data.blob();
+          console.log(blob);
+          const link = URL.createObjectURL(blob);
+          setimage({
+            display: true,
+            data: link,
+          });
+          // setMessages((state) => [...state, resdata]);
+        });
+        return;
+      }
+      if (_select == "video2text" && input.includes("youtube")) {
+        setload(true);
+        setMessages((state) => [
+          ...state,
+          "Explain and summarize this video " + input,
+        ]);
+        // setMessages((state) => [...state, "Loading..."]);
+        setInitialMessage(false);
+        await fetch(`http://127.0.0.1:5001/api/videoToText`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ youtube_url: input }),
+        }).then(async (data) => {
+          let resdata = await data.text();
+          console.log(resdata);
+          setload(false);
+          setMessages((state) => [...state, JSON.parse(resdata)]);
+        });
+        return;
+      }
       setMessages((state) => [...state, input]);
       setMessages((state) => [...state, "Loading..."]);
       const response = await fetch("http://localhost:3005/chat_with_ai", {
@@ -127,20 +272,36 @@ const Ai = () => {
       toast.error("Please login");
     }
   };
+  const containerStyle = {
+    position: "relative",
+    // minHeight: "100vh",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    zIndex: "100",
+    transform: "translate(-50%, -50%)",
+    // Make background unselectable
+  };
   return (
     <>
-      <div>
+      <div style={{ userSelect: load ? "none" : "auto" }}>
         <div className="techwave_fn_fixedsub">
           <ul></ul>
         </div>
-
-        {/* <div className='techwave_fn_preloader'>
-        <svg>
-          <circle className='first_circle' cx='50%' cy='50%' r='110'></circle>
-          <circle className='second_circle' cx='50%' cy='50%' r='110'></circle>
-        </svg>
-      </div> */}
-
+        {load && (
+          <div style={containerStyle}>
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 34,
+                  }}
+                  spin
+                />
+              }
+            />
+          </div>
+        )}
         <div className="techwave_fn_font">
           <Link className="font__closer_link fn__icon_button" href="/">
             <img src="svg/close.svg" alt="" className="fn__svg" />
@@ -168,6 +329,16 @@ const Ai = () => {
             </Link>
           </div>
         </div>
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 24,
+              }}
+              spin
+            />
+          }
+        />
 
         <div className="techwave_fn_wrapper fn__has_sidebar">
           <div className="techwave_fn_wrap">
@@ -471,6 +642,13 @@ const Ai = () => {
                       initialMessageState={initialMessageState}
                       handleSubmit={handleSubmit}
                       setInput={setInput}
+                      setInitialMessage={setInitialMessage}
+                      setMessages={setMessages}
+                      setopen={setopen}
+                      open={open}
+                      _select={_select}
+                      setSelect={setSelect}
+                      handleChange={handleChange}
                     />
                   ) : (
                     <div className="chat__page">
@@ -493,6 +671,7 @@ const Ai = () => {
                             handleSubmit={handleSubmit}
                             setInput={setInput}
                             message={item}
+                            image={image}
                           />
                         );
                       })}
@@ -547,8 +726,49 @@ const Ai = () => {
                                 <path d="M14 13.5V8C14 5.79086 12.2091 4 10 4C7.79086 4 6 5.79086 6 8V13.5C6 17.0899 8.91015 20 12.5 20C16.0899 20 19 17.0899 19 13.5V4H21V13.5C21 18.1944 17.1944 22 12.5 22C7.80558 22 4 18.1944 4 13.5V8C4 4.68629 6.68629 2 10 2C13.3137 2 16 4.68629 16 8V13.5C16 15.433 14.433 17 12.5 17C10.567 17 9 15.433 9 13.5V8H11V13.5C11 14.3284 11.6716 15 12.5 15C13.3284 15 14 14.3284 14 13.5Z"></path>
                               </svg>
                             </button>
+                            <button
+                              className="btn3"
+                              onClick={() => {
+                                setopen((prev) => {
+                                  if (!prev == false) {
+                                    setSelect("none");
+                                  } else {
+                                    setSelect("video2text");
+                                  }
+                                  return !prev;
+                                });
+                              }}
+                            >
+                              <svg
+                                className="fn__svg"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M3 4H21V6H3V4ZM3 11H21V13H3V11ZM3 18H21V20H3V18Z"></path>
+                              </svg>
+                            </button>
                           </div>
                         </div>
+                        <Select
+                          defaultValue="video2text"
+                          style={{
+                            width: "auto",
+                            margin: "10px 40px",
+                            display: open ? "block" : "none",
+                          }}
+                          onChange={handleChange}
+                          options={[
+                            {
+                              value: "video2text",
+                              label: "Video -> Text",
+                            },
+                            {
+                              value: "textToImage",
+                              label: "Text -> Image",
+                            },
+                          ]}
+                        />
                       </div>
                     </div>
                   )}

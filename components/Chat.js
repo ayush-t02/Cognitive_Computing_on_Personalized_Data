@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 const Chat = ({
@@ -6,6 +7,7 @@ const Chat = ({
   message,
   idx,
   handleSubmit,
+  image,
 }) => {
   var messageArr = message.split("```");
 
@@ -88,13 +90,22 @@ const Chat = ({
                   <div className="author">
                     <span>Bot</span>
                   </div>
-                  {messageArr.map((item, index) => {
-                    return (
-                      <div key={index} className="chat">
-                        <ReactMarkdown>{item}</ReactMarkdown>
-                      </div>
-                    );
-                  })}
+                  {!image.display ? (
+                    messageArr.map((item, index) => {
+                      return (
+                        <div key={index} className="chat">
+                          <ReactMarkdown>{item}</ReactMarkdown>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <Image
+                      src={image.data}
+                      height={300}
+                      width={300}
+                      alt="Your Image"
+                    />
+                  )}
                 </div>
               )}
             </div>
