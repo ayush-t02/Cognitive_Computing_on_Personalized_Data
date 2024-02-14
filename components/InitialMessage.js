@@ -18,6 +18,8 @@ const InitialMessage = ({
   setSelect,
   handleChange,
   load,
+  input,
+  setimage,
 }) => {
   const inputFile = React.useRef(null);
 
@@ -33,7 +35,7 @@ const InitialMessage = ({
     if (files[0].type == "audio/mpeg" || files[0].type == "audio/wav") {
       const formData = new FormData();
       formData.append("audio", files[0]);
-
+      setimage((prev) => [...prev, false]);
       setMessages((state) => [
         ...state,
         "Elaborate the following file " + files[0].name,
@@ -48,7 +50,7 @@ const InitialMessage = ({
         .then(async (response) => {
           var data = await response.json();
           console.log(data.transcription);
-
+          setimage((prev) => [...prev, false]);
           setMessages((state) => [...state, data.transcription]);
 
           toast.success("File uploaded successfully");
@@ -74,12 +76,12 @@ const InitialMessage = ({
       })
         .then(async (response) => {
           let data = await response.text();
-          console.log(data);
+          setimage((prev) => [...prev, false]);
           setMessages((state) => [
             ...state,
             "Elaborate the following file " + files[0].name,
           ]);
-          setMessages((state) => [...state, "Loading..."]);
+          // setMessages((state) => [...state, "Loading..."]);
           toast.success("File uploaded successfully");
           const res = await fetch("http://localhost:3005/image-text-chat", {
             method: "POST",
@@ -92,6 +94,7 @@ const InitialMessage = ({
           const reader = res.body.pipeThrough(decoder).getReader();
           var lastMessage = "";
           setInitialMessage(false);
+          setimage((prev) => [...prev, false]);
           while (true) {
             const { value, done } = await reader.read();
             if (done) break;
@@ -273,6 +276,7 @@ const InitialMessage = ({
                 ></textarea>
                 <textarea
                   rows="1"
+                  value={input}
                   onChange={(e) => {
                     setInput(e.target.value);
                   }}

@@ -21,10 +21,7 @@ const Ai = () => {
   const [initialMessageState, setInitialMessage] = React.useState(true);
   const dispatch = useDispatch();
   const [open, setopen] = React.useState(false);
-  const [image, setimage] = React.useState({
-    data: "",
-    display: false,
-  });
+  const [image, setimage] = React.useState([]);
   const [_select, setSelect] = React.useState("none");
   const [load, setload] = React.useState(false);
   const [input, setInput] = React.useState("");
@@ -47,6 +44,7 @@ const Ai = () => {
       const formData = new FormData();
       formData.append("audio", files[0]);
       setInitialMessage(false);
+      setimage((prev) => [...prev, false]);
       setMessages((state) => [
         ...state,
         "Elaborate the following file " + files[0].name,
@@ -59,9 +57,9 @@ const Ai = () => {
         body: formData,
       })
         .then(async (response) => {
+          setimage((prev) => [...prev, false]);
           var data = await response.json();
           console.log(data.transcription);
-
           setMessages((state) => [...state, data.transcription]);
 
           toast.success("File uploaded successfully");
@@ -88,11 +86,12 @@ const Ai = () => {
         .then(async (response) => {
           let data = await response.text();
           console.log(data);
+          setimage((prev) => [...prev, false]);
           setMessages((state) => [
             ...state,
             "Elaborate the following file " + files[0].name,
           ]);
-          setMessages((state) => [...state, "Loading..."]);
+          // setMessages((state) => [...state, "Loading..."]);
           toast.success("File uploaded successfully");
           const res = await fetch("http://localhost:3005/image-text-chat", {
             method: "POST",
@@ -105,6 +104,7 @@ const Ai = () => {
           const reader = res.body.pipeThrough(decoder).getReader();
           var lastMessage = "";
           setInitialMessage(false);
+          setimage((prev) => [...prev, false]);
           while (true) {
             const { value, done } = await reader.read();
             if (done) break;
@@ -193,11 +193,13 @@ const Ai = () => {
     e.preventDefault();
     if (user && user.email) {
       console.log(_select);
-      setimage({ data: "", display: false });
+      // setimage({ display: false });
       if (_select == "textToImage") {
         setload(true);
+        setimage((prev) => [...prev, false]);
         setMessages((state) => [...state, input]);
-        setMessages((state) => [...state, "Loading..."]);
+        // setimage((prev) => [...prev, false]);
+        // setMessages((state) => [...state, "Loading..."]);
         setInitialMessage(false);
         await fetch(`http://127.0.0.1:5001/api/textToImage`, {
           method: "POST",
@@ -206,22 +208,18 @@ const Ai = () => {
           },
           body: JSON.stringify(input),
         }).then(async (data) => {
-          console.log(data);
-
           setload(false);
           const blob = await data.blob();
           console.log(blob);
           const link = URL.createObjectURL(blob);
-          setimage({
-            display: true,
-            data: link,
-          });
+          setimage((prev) => [...prev, true]);
+          setMessages((state) => [...state, link]);
+          
           // setMessages((state) => [...state, resdata]);
         });
-        return;
-      }
-      if (_select == "video2text" && input.includes("youtube")) {
+      } else if (_select == "video2text" && input.includes("youtube")) {
         setload(true);
+        setimage((prev) => [...prev, false]);
         setMessages((state) => [
           ...state,
           "Explain and summarize this video " + input,
@@ -239,38 +237,42 @@ const Ai = () => {
           console.log(resdata);
           setload(false);
           setMessages((state) => [...state, JSON.parse(resdata)]);
+          setimage((prev) => [...prev, false]);
         });
-        return;
-      }
-      setMessages((state) => [...state, input]);
-      setMessages((state) => [...state, "Loading..."]);
-      const response = await fetch("http://localhost:3005/chat_with_ai", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          email: user.email,
-          message: input,
-        }),
-      });
-      let decoder = new TextDecoderStream();
-      const reader = response.body.pipeThrough(decoder).getReader();
-      var lastMessage = "";
-      setInitialMessage(false);
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        setMessages((prevMessages) => {
-          const updatedMessages = [...prevMessages];
-          lastMessage = lastMessage + value;
-          updatedMessages[updatedMessages.length - 1] = lastMessage;
-          return updatedMessages;
+      } else {
+        setimage((prev) => [...prev, false]);
+        setMessages((state) => [...state, input]);
+        setMessages((state) => [...state, "Loading..."]);
+        const response = await fetch("http://localhost:3005/chat_with_ai", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            email: user.email,
+            message: input,
+          }),
         });
+        let decoder = new TextDecoderStream();
+        const reader = response.body.pipeThrough(decoder).getReader();
+        var lastMessage = "";
+        setInitialMessage(false);
+        setimage((prev) => [...prev, false]);
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages];
+            lastMessage = lastMessage + value;
+            updatedMessages[updatedMessages.length - 1] = lastMessage;
+            return updatedMessages;
+          });
+        }
       }
     } else {
       toast.error("Please login");
     }
+    setInput("");
   };
   const containerStyle = {
     position: "relative",
@@ -649,6 +651,8 @@ const Ai = () => {
                       _select={_select}
                       setSelect={setSelect}
                       handleChange={handleChange}
+                      input={input}
+                      setimage={setimage}
                     />
                   ) : (
                     <div className="chat__page">
@@ -661,17 +665,17 @@ const Ai = () => {
                           <h1 className="title">Chat Bot Definition</h1>
                         </div>
                       </div>
-                      {message.map((item, idx) => {
+                      {image.map((item, idx) => {
                         return (
                           <Chat
                             key={idx}
-                            // chat={message}
+                            chat={message}
                             initialMessageState={initialMessageState}
                             idx={idx}
                             handleSubmit={handleSubmit}
                             setInput={setInput}
-                            message={item}
-                            image={image}
+                            message={message[idx]}
+                            image={item}
                           />
                         );
                       })}
@@ -691,6 +695,7 @@ const Ai = () => {
                             ></textarea>
                             <textarea
                               rows="1"
+                              value={input}
                               onChange={(e) => {
                                 setInput(e.target.value);
                               }}
