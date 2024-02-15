@@ -461,55 +461,6 @@ const Ai = () => {
                         <span className="text">Home</span>
                       </Link>
                     </li>
-                    <li>
-                      <Link
-                        href="community-feed.html"
-                        className="fn__tooltip menu__item"
-                        data-position="right"
-                        title="Community Feed"
-                      >
-                        <span className="icon">
-                          <img
-                            src="svg/community.svg"
-                            alt=""
-                            className="fn__svg"
-                          />
-                        </span>
-                        <span className="text">Community Feed</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="personal-feed.html"
-                        className="fn__tooltip menu__item"
-                        data-position="right"
-                        title="Personal Feed"
-                      >
-                        <span className="icon">
-                          <img
-                            src="svg/person.svg"
-                            alt=""
-                            className="fn__svg"
-                          />
-                        </span>
-                        <span className="text">
-                          Personal Feed<span className="count">48</span>
-                        </span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/"
-                        className="fn__tooltip menu__item"
-                        data-position="right"
-                        title="Finetuned Models"
-                      >
-                        <span className="icon">
-                          <img src="svg/cube.svg" alt="" className="fn__svg" />
-                        </span>
-                        <span className="text">Finetuned Models</span>
-                      </Link>
-                    </li>
                   </ul>
                 </div>
 
@@ -548,72 +499,6 @@ const Ai = () => {
                 <div className="nav_group">
                   <h2 className="group__title">Support</h2>
                   <ul className="group__list">
-                    <li>
-                      <Link
-                        href="/"
-                        className="fn__tooltip menu__item"
-                        data-position="right"
-                        title="Pricing"
-                      >
-                        <span className="icon">
-                          <img
-                            src="svg/dollar.svg"
-                            alt=""
-                            className="fn__svg"
-                          />
-                        </span>
-                        <span className="text">Pricing</span>
-                      </Link>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <Link
-                        href="video-generation.html"
-                        className="fn__tooltip menu__item"
-                        title="FAQ &amp; Help"
-                        data-position="right"
-                      >
-                        <span className="icon">
-                          <img
-                            src="svg/question.svg"
-                            alt=""
-                            className="fn__svg"
-                          />
-                        </span>
-                        <span className="text">FAQ &amp; Help</span>
-                        <span className="trigger">
-                          <img src="svg/arrow.svg" alt="" className="fn__svg" />
-                        </span>
-                      </Link>
-                      <ul className="sub-menu">
-                        <li>
-                          <Link href="/">
-                            <span className="text">Documentation</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/">
-                            <span className="text">FAQ</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="changelog.html">
-                            <span className="text">
-                              Changelog<span className="fn__sup">(4.1.2)</span>
-                            </span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="contact.html">
-                            <span className="text">Contact Us</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="index-3.html">
-                            <span className="text">Home #2</span>
-                          </Link>
-                        </li>
-                      </ul>
-                    </li>
                     <li>
                       <Link
                         href="sign-in.html"
