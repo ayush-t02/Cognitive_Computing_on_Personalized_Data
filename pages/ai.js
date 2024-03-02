@@ -214,7 +214,7 @@ const Ai = () => {
           const link = URL.createObjectURL(blob);
           setimage((prev) => [...prev, true]);
           setMessages((state) => [...state, link]);
-          
+
           // setMessages((state) => [...state, resdata]);
         });
       } else if (_select == "video2text" && input.includes("youtube")) {
@@ -229,16 +229,59 @@ const Ai = () => {
         await fetch(`http://127.0.0.1:5001/api/videoToText`, {
           method: "POST",
           headers: {
-            "Content-type": "application/json",
+            Accept: "*/*",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
           },
           body: JSON.stringify({ youtube_url: input }),
-        }).then(async (data) => {
-          let resdata = await data.text();
-          console.log(resdata);
-          setload(false);
-          setMessages((state) => [...state, JSON.parse(resdata)]);
-          setimage((prev) => [...prev, false]);
-        });
+        })
+          .then(async (data) => {
+            const resdata = await data.text();
+            const res = JSON.parse(resdata);
+            console.log(res, res.type);
+            if (res.type == "model") {
+              setload(false);
+              setMessages((state) => [...state, res.result]);
+              setimage((prev) => [...prev, false]);
+            } else if (res.type == "yt") {
+              setMessages((state) => [...state, "Loading..."]);
+              const response = await fetch(
+                "http://localhost:3005/video-text-chat",
+                {
+                  method: "POST",
+                  headers: {
+                    Accept: "*/*",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                  },
+                  body: JSON.stringify({
+                    title: res.title,
+                    channel_name: res.channel_name,
+                  }),
+                }
+              );
+              let decoder = new TextDecoderStream();
+              const reader = response.body.pipeThrough(decoder).getReader();
+              var lastMessage = "";
+              setload(false);
+
+              setimage((prev) => [...prev, false]);
+              while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                setMessages((prevMessages) => {
+                  const updatedMessages = [...prevMessages];
+                  lastMessage = lastMessage + value;
+                  updatedMessages[updatedMessages.length - 1] = lastMessage;
+                  return updatedMessages;
+                });
+              }
+            }
+          })
+          .catch((err) => {
+            setload(false);
+            console.log(err);
+          });
       } else {
         setimage((prev) => [...prev, false]);
         setMessages((state) => [...state, input]);
