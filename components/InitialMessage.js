@@ -16,6 +16,7 @@ const InitialMessage = ({
   open,
   _select,
   setSelect,
+  setload,
   handleChange,
   load,
   input,
@@ -63,7 +64,15 @@ const InitialMessage = ({
       files[0].type == "image/jpeg" ||
       files[0].type == "image/jpg"
     ) {
+      setimage((prev) => [...prev, false]);
+      setMessages((state) => [
+        ...state,
+        "Elaborate the following file " + files[0].name,
+      ]);
+      setload(true);
+      setInitialMessage(false);
       console.log(files);
+      setMessages((state) => [...state, "Loading..."]);
       const formData = new FormData();
       formData.append("image", files[0]);
       console.log(formData, "formData");
@@ -76,13 +85,8 @@ const InitialMessage = ({
       })
         .then(async (response) => {
           let data = await response.text();
-          setimage((prev) => [...prev, false]);
-          setMessages((state) => [
-            ...state,
-            "Elaborate the following file " + files[0].name,
-          ]);
           // setMessages((state) => [...state, "Loading..."]);
-          toast.success("File uploaded successfully");
+          // toast.success("File uploaded successfully");
           const res = await fetch("http://localhost:3005/image-text-chat", {
             method: "POST",
             headers: {
@@ -93,8 +97,9 @@ const InitialMessage = ({
           let decoder = new TextDecoderStream();
           const reader = res.body.pipeThrough(decoder).getReader();
           var lastMessage = "";
-          setInitialMessage(false);
+          // setInitialMessage(false);
           setimage((prev) => [...prev, false]);
+          setload(false);
           while (true) {
             const { value, done } = await reader.read();
             if (done) break;
@@ -107,6 +112,7 @@ const InitialMessage = ({
           }
         })
         .catch((err) => {
+          setload(false);
           return console.log("error", err);
         });
     } else {

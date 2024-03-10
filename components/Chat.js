@@ -10,8 +10,7 @@ const Chat = ({
   handleSubmit,
   image,
 }) => {
-  
-  var messageArr = message.split("```");
+  // var messageArr = message.split("```");
 
   return (
     <>
@@ -78,14 +77,12 @@ const Chat = ({
                   </div>
                 </div>
               )}
-              {idx % 2 === 0 ? (
+              {idx % 2 == 0 ? (
                 <div className="chat__box your__chat">
                   <div className="author">
                     <span>You</span>
                   </div>
-                  <div className="chat">
-                    <ReactMarkdown>{message}</ReactMarkdown>
-                  </div>
+                  <div className="chat">{message}</div>
                 </div>
               ) : (
                 <div className="chat__box bot__chat">
@@ -93,14 +90,14 @@ const Chat = ({
                     <span>Bot</span>
                   </div>
                   {!image ? (
-                    messageArr.map((item, index) => {
-                      return (
-                        <div key={index} className="chat">
-                          <ReactMarkdown>{item}</ReactMarkdown>
-                        </div>
-                      );
-                    })
+                    // messageArr.map((item, index) => {
+                    // return (
+                    <div className="chat">
+                      <p>{message}</p>
+                    </div>
                   ) : (
+                    //   );
+                    // })
                     <Image
                       src={message}
                       height={300}

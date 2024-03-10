@@ -73,6 +73,14 @@ const Ai = () => {
       files[0].type == "image/jpg"
     ) {
       console.log(files);
+      setimage((prev) => [...prev, false]);
+      setMessages((state) => [
+        ...state,
+        "Elaborate the following file " + files[0].name,
+      ]);
+      setload(true);
+      setInitialMessage(false);
+      setMessages((state) => [...state, "Loading..."]);
       const formData = new FormData();
       formData.append("image", files[0]);
       console.log(formData, "formData");
@@ -86,13 +94,7 @@ const Ai = () => {
         .then(async (response) => {
           let data = await response.text();
           console.log(data);
-          setimage((prev) => [...prev, false]);
-          setMessages((state) => [
-            ...state,
-            "Elaborate the following file " + files[0].name,
-          ]);
           // setMessages((state) => [...state, "Loading..."]);
-          toast.success("File uploaded successfully");
           const res = await fetch("http://localhost:3005/image-text-chat", {
             method: "POST",
             headers: {
@@ -100,11 +102,13 @@ const Ai = () => {
             },
             body: JSON.stringify({ data: data, type: "image" }),
           });
+
           let decoder = new TextDecoderStream();
           const reader = res.body.pipeThrough(decoder).getReader();
           var lastMessage = "";
           setInitialMessage(false);
           setimage((prev) => [...prev, false]);
+          setload(false);
           while (true) {
             const { value, done } = await reader.read();
             if (done) break;
@@ -117,6 +121,7 @@ const Ai = () => {
           }
         })
         .catch((err) => {
+          setload(false);
           return console.log("error", err);
         });
     } else {
@@ -577,6 +582,7 @@ const Ai = () => {
                       setopen={setopen}
                       open={open}
                       _select={_select}
+                      setload={setload}
                       setSelect={setSelect}
                       handleChange={handleChange}
                       input={input}
