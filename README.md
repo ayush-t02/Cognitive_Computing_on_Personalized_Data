@@ -10,14 +10,13 @@
 
 ## Description
 
-* Because technology is constantly being updated, YouTube serves as a platform for these updates to reach a large audience.
-* A lot of people can't afford paid courses on various Edtech platforms like Coursera, Udemy, etc.
-* Thus, learning through Youtube is the only way out. But, watching Youtube tutorials does not provide credibility to showcase as a criteria of employability. 
-* As a result, we created an interactive and user-friendly mobile application that will aid in the credibility of YouTube playlists.
-* GoalTube is an AI platform that provides credibility to learners across all backgrounds through our dynamic and customizable test who aim to educate themselves through platforms like YouTube.
-* The user can sign in with their Google account and add the YouTube playlist that they want to finish. The Playlist will not be added to the course list until it has been approved by the admin panel. Following videos, the user will be required to complete a quiz in which the questions are generated based on the subtitles extracted from the video using NLP(Natural Language Processing). Users can also view and watch playlists uploaded by other users.
-* If a user believes that a question or answer is incorrect, they can report it to the admin panel, and the admin panel will investigate further.
-* If the user receives a certain number of passing points at the end of all videos and quizzes, they will be certified for that course.
+Computing encompasses imperative, autonomous, and cognitive technologies. Imperative computing follows programmed instructions on stored data, while autonomous computing makes independent decisions on procedural data. Cognitive computing mirrors human brain processes like reasoning and learning. It's advanced and not restricted to specific data, utilizing a web scraping approach.
+
+Cognitive Computing aligns with Large Language Models (LLMs), such as GPT-4 (8K), operating through tokenization—breaking prompts into units for processing. Tokenization varies, with tokens ranging from letters to words. LLMs like GPT-4 have an 8K token limit, beyond which context is lost.
+
+To address this, Langchain uses a recursive model, breaking data into manageable chunks. These are converted into vectors and stored in Pinecone for semantic search. User prompts trigger refined data retrieval by LLMs, enhancing clarity. Flask APIs manage services like text-to-video, image, or summarization.
+
+The web app's interface is user-friendly, featuring a responsive chat window for custom data interaction. Users can navigate content-specific pages for text, audio, image, and video inputs. Langchain ensures precise, custom data-based responses, overcoming token limitations.
 
 ## Links
 * GitHub Repo link: [Link to repository](https://github.com/ayush-t02/Cognitive_Computing_on_Personalized_Data)
