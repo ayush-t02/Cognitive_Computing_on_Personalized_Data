@@ -14,7 +14,11 @@ import { logoutSuccess } from "../reducer";
 import { auth } from "../utils/Firebase";
 import Chat from "../components/Chat";
 import InitialMessage from "../components/InitialMessage";
-import axios from "axios";
+import pdfToText from "../components/PdfParse";
+import Image from "next/image";
+
+// import axios from "axios";
+
 const Ai = () => {
   const route = useRouter();
   const { user } = useSelector((state) => state.user);
@@ -30,7 +34,6 @@ const Ai = () => {
   const reduxDispatch = useDispatch();
   const inputFile = React.useRef(null);
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     setSelect(value);
   };
   const handlefile = async (e) => {
@@ -40,7 +43,28 @@ const Ai = () => {
       chunkOverlap: 200,
     });
     console.log(files[0]);
-    if (files[0].type == "audio/mpeg") {
+    if (files[0].type == "application/pdf") {
+      await pdfToText(files[0])
+        .then(async (text) => {
+          const output = await splitter.createDocuments([text]);
+          console.log(text);
+          fetch("http://localhost:3005/set_file_to_pinecone", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              combinedContent: output,
+            }),
+          });
+          toast.success("File uploaded successfully");
+        })
+        .catch((error) => {
+          toast.error("Please try with different file");
+          console.error("Failed to extract text from pdf", error);
+        });
+    } else if (files[0].type == "audio/mpeg") {
       const formData = new FormData();
       formData.append("audio", files[0]);
       setInitialMessage(false);
@@ -712,171 +736,60 @@ const Ai = () => {
                     </div>
                   )}
 
-                  <div className="chat__sidebar">
+                  {/* <div className="chat__sidebar">
                     <div className="sidebar_header">
-                      <Link href="/chat0" className="fn__new_chat_link">
-                        <span className="icon"></span>
-                        <span className="text">New Chat</span>
-                      </Link>
+                      <div className="fn__new_chat_link">
+                        <span className="icon svgimg">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                          </svg>
+                        </span>
+                        <span className="text">History</span>
+                        {idx % 2 == 0 ? (
+                          <div className="chat__box your__chat">
+                            <div className="author">
+                              <span>You</span>
+                            </div>
+                            <div className="chat">{message}</div>
+                          </div>
+                        ) : (
+                          <div className="chat__box bot__chat">
+                            <div className="author">
+                              <span>Bot</span>
+                            </div>
+                            {!image ? (
+                              // messageArr.map((item, index) => {
+                              // return (
+                              <div className="chat">
+                                <p>{message}</p>
+                              </div>
+                            ) : (
+                              //   );
+                              // })
+                              <Image
+                                src={message}
+                                height={300}
+                                width={300}
+                                style={{
+                                  margin: "5px auto",
+                                }}
+                                alt="Your Image"
+                              />
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="sidebar_content">
                       <div className="chat__group new">
                         <h2 className="group__title">Today</h2>
-                        <ul className="group__list">
-                          <li className="group__item">
-                            <div className="fn__chat_link active" href="/chat1">
-                              <span className="text">Chat Bot Definition</span>
-                              <input
-                                type="text"
-                                defaultvalue="Chat Bot Definition"
-                                value="Chat Bot Definition"
-                              />
-                              <span className="options">
-                                <button className="trigger">
-                                  <span></span>
-                                </button>
-                                <span className="options__popup">
-                                  <span className="options__list">
-                                    <button className="edit">Edit</button>
-                                    <button className="delete">Delete</button>
-                                  </span>
-                                </span>
-                              </span>
-                              <span className="save_options">
-                                <button className="save">
-                                  <img
-                                    src="svg/check.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                                <button className="cancel">
-                                  <img
-                                    src="svg/close.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                              </span>
-                            </div>
-                          </li>
-                          <li className="group__item">
-                            <div className="fn__chat_link" href="/chat2">
-                              <span className="text">Essay: Marketing</span>
-                              <input
-                                type="text"
-                                defaultvalue="Essay: Marketing"
-                                value="Essay: Marketing"
-                              />
-                              <span className="options">
-                                <button className="trigger">
-                                  <span></span>
-                                </button>
-                                <span className="options__popup">
-                                  <span className="options__list">
-                                    <button className="edit">Edit</button>
-                                    <button className="delete">Delete</button>
-                                  </span>
-                                </span>
-                              </span>
-                              <span className="save_options">
-                                <button className="save">
-                                  <img
-                                    src="svg/check.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                                <button className="cancel">
-                                  <img
-                                    src="svg/close.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                              </span>
-                            </div>
-                          </li>
-                          <li className="group__item">
-                            <div className="fn__chat_link" href="/chat3">
-                              <span className="text">
-                                Future of Social Media
-                              </span>
-                              <input
-                                type="text"
-                                deafaultvalue="Future of Social Media"
-                                value="Future of Social Media"
-                              />
-                              <span className="options">
-                                <button className="trigger">
-                                  <span></span>
-                                </button>
-                                <span className="options__popup">
-                                  <span className="options__list">
-                                    <button className="edit">Edit</button>
-                                    <button className="delete">Delete</button>
-                                  </span>
-                                </span>
-                              </span>
-                              <span className="save_options">
-                                <button className="save">
-                                  <img
-                                    src="svg/check.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                                <button className="cancel">
-                                  <img
-                                    src="svg/close.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                              </span>
-                            </div>
-                          </li>
-                          <li className="group__item">
-                            <div className="fn__chat_link" href="/chat4">
-                              <span className="text">Business Ideas</span>
-                              <input
-                                type="text"
-                                defaultvalue="Business Ideas"
-                                value="Business Ideas"
-                              />
-                              <span className="options">
-                                <button className="trigger">
-                                  <span></span>
-                                </button>
-                                <span className="options__popup">
-                                  <span className="options__list">
-                                    <button className="edit">Edit</button>
-                                    <button className="delete">Delete</button>
-                                  </span>
-                                </span>
-                              </span>
-                              <span className="save_options">
-                                <button className="save">
-                                  <img
-                                    src="svg/check.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                                <button className="cancel">
-                                  <img
-                                    src="svg/close.svg"
-                                    alt=""
-                                    className="fn__svg"
-                                  />
-                                </button>
-                              </span>
-                            </div>
-                          </li>
-                        </ul>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

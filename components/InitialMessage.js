@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import pdfToText from "./PdfParse";
 
 const InitialMessage = ({
   setInput,
@@ -33,7 +34,29 @@ const InitialMessage = ({
       chunkOverlap: 200,
     });
     console.log(files[0]);
-    if (files[0].type == "audio/mpeg" || files[0].type == "audio/wav") {
+    if (files[0].type == "application/pdf") {
+      await pdfToText(files[0])
+        .then(async (text) => {
+          const output = await splitter.createDocuments([text]);
+          console.log(text);
+          console.log(output);
+          fetch("http://localhost:3005/set_file_to_pinecone", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              combinedContent: output,
+            }),
+          });
+          toast.success("File uploaded successfully");
+        })
+        .catch((error) => {
+          toast.error("Please try with different file");
+          console.error("Failed to extract text from pdf", error);
+        });
+    } else if (files[0].type == "audio/mpeg" || files[0].type == "audio/wav") {
       const formData = new FormData();
       formData.append("audio", files[0]);
       setimage((prev) => [...prev, false]);

@@ -1505,9 +1505,9 @@ frenify_typing span {
   }
 }
 
-.techwave_fn_wrapper.fn__has_sidebar .techwave_fn_content {
+/* .techwave_fn_wrapper.fn__has_sidebar .techwave_fn_content {
   margin-right: 300px;
-}
+} */
 
 .techwave_fn_content {
   position: relative;
@@ -6328,7 +6328,9 @@ a.fn__like.no_border .fn__svg {
 .techwave_fn_image_generation_page .header_bottom textarea:focus {
   border-color: var(--techwave-main-color);
 }
-:where(.css-dev-only-do-not-override-pr0fja).ant-select:not(.ant-select-customize-input)
+:where(.css-dev-only-do-not-override-pr0fja).ant-select:not(
+    .ant-select-customize-input
+  )
   .ant-select-selector {
   position: relative;
   background-color: #0f0e11;
@@ -6421,7 +6423,7 @@ a.fn__like.no_border .fn__svg {
   margin-top: -12px;
 }
 
-.fn__new_chat_link .icon:before {
+.fn__new_chat_link > span:has(.svgimg).icon:before {
   content: "";
   position: absolute;
   width: 2px;
