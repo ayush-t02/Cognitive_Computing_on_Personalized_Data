@@ -1441,13 +1441,13 @@ frenify_typing {
   max-width: 980px;
 }
 
-.clearfix:after,
+/* .clearfix:after,
 .clearfix:before,
 .container:after {
   content: "";
   clear: both;
   display: table;
-}
+} */
 
 .techwave_fn_button.has__icon,
 .techwave_fn_content,

@@ -11,6 +11,8 @@ import pdfToText from "./PdfParse";
 const InitialMessage = ({
   setInput,
   handleSubmit,
+  setdrawer,
+  drawer,
   setInitialMessage,
   setMessages,
   setopen,
@@ -199,9 +201,9 @@ const InitialMessage = ({
     <>
       <div style={{ userSelect: load ? "none" : "auto" }}>
         <div className="chat__page">
-          <div className="font__trigger">
+          {/* <div className="font__trigger">
             <span></span>
-          </div>
+          </div> */}
           {load && (
             <div style={containerStyle}>
               <Spin
@@ -217,8 +219,23 @@ const InitialMessage = ({
             </div>
           )}
           <div className="fn__title_holder">
-            <div className="container">
+            <div
+              style={{ display: "flex", justifyContent: "space-between" }}
+              className="container"
+            >
+              {console.log(drawer)}
               <h1 className="title">Chat Bot Definition</h1>
+              <span className="icon">
+                <svg
+                  onClick={(e)=>setdrawer((prev) => !prev)}
+                  style={{ width: "25px", cursor: "pointer" }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M7.82843 10.9999H20V12.9999H7.82843L13.1924 18.3638L11.7782 19.778L4 11.9999L11.7782 4.22168L13.1924 5.63589L7.82843 10.9999Z"></path>
+                </svg>
+              </span>
             </div>
           </div>
 

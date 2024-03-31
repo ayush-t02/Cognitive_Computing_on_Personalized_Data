@@ -5,17 +5,18 @@ import { Spin } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import "react-toastify/dist/ReactToastify.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Header from "../components/Header";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { logoutSuccess } from "../reducer";
-import { auth } from "../utils/Firebase";
+import { auth, db } from "../utils/Firebase";
 import Chat from "../components/Chat";
 import InitialMessage from "../components/InitialMessage";
 import pdfToText from "../components/PdfParse";
 import Image from "next/image";
+import ChatHistory from "../components/ChatHistory";
 
 // import axios from "axios";
 
@@ -25,8 +26,10 @@ const Ai = () => {
   const [initialMessageState, setInitialMessage] = React.useState(true);
   const dispatch = useDispatch();
   const [open, setopen] = React.useState(false);
+  const [drawer, setdrawer] = React.useState(false);
   const [image, setimage] = React.useState([]);
   const [_select, setSelect] = React.useState("none");
+  const [data, setdata] = React.useState([]);
   const [load, setload] = React.useState(false);
   const [input, setInput] = React.useState("");
   const [message, setMessages] = React.useState([]);
@@ -36,6 +39,19 @@ const Ai = () => {
   const handleChange = (value) => {
     setSelect(value);
   };
+  useEffect(() => {
+    const getmsg = async (receivedEmail) => {
+      const docref = await db.collection("history");
+
+      var ans = await docref.doc(receivedEmail).get();
+      if (ans.exists) {
+        setdata(ans.data().messages);
+      }
+    };
+    if (user && user.email) {
+      getmsg(user.email);
+    }
+  }, [user]);
   const handlefile = async (e) => {
     const files = inputFile.current.files;
     const splitter = new RecursiveCharacterTextSplitter({
@@ -289,6 +305,7 @@ const Ai = () => {
                   }),
                 }
               );
+              // eslint-disable-next-line no-undef
               let decoder = new TextDecoderStream();
               const reader = response.body.pipeThrough(decoder).getReader();
               var lastMessage = "";
@@ -592,18 +609,25 @@ const Ai = () => {
                 </div>
               </div>
             </div>
-
-            <div className="techwave_fn_content">
+            {console.log(drawer)}
+            <div
+              style={{
+                marginRight: drawer ? "300px" : "",
+              }}
+              className="techwave_fn_content"
+            >
               <div className="techwave_fn_page">
                 <div className="techwave_fn_aichatbot_page fn__chatbot">
                   {initialMessageState ? (
                     <InitialMessage
                       initialMessageState={initialMessageState}
                       handleSubmit={handleSubmit}
+                      setdrawer={setdrawer}
                       setInput={setInput}
                       setInitialMessage={setInitialMessage}
                       setMessages={setMessages}
                       setopen={setopen}
+                      drawer={drawer}
                       open={open}
                       _select={_select}
                       setload={setload}
@@ -614,13 +638,30 @@ const Ai = () => {
                     />
                   ) : (
                     <div className="chat__page">
-                      <div className="font__trigger">
+                      {/* <div className="font__trigger">
                         <span></span>
-                      </div>
+                      </div> */}
 
                       <div className="fn__title_holder">
-                        <div className="container">
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                          className="container"
+                        >
                           <h1 className="title">Chat Bot Definition</h1>
+                          <span className="icon">
+                            <svg
+                              onClick={(e) => setdrawer((prev) => !prev)}
+                              style={{ width: "25px", cursor: "pointer" }}
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                            >
+                              <path d="M7.82843 10.9999H20V12.9999H7.82843L13.1924 18.3638L11.7782 19.778L4 11.9999L11.7782 4.22168L13.1924 5.63589L7.82843 10.9999Z"></path>
+                            </svg>
+                          </span>
                         </div>
                       </div>
                       {image.map((item, idx) => {
@@ -630,7 +671,11 @@ const Ai = () => {
                             chat={message}
                             initialMessageState={initialMessageState}
                             idx={idx}
+                            data={data}
+                            setdata={setdata}
+                            imgState={image}
                             handleSubmit={handleSubmit}
+                            email={user.email}
                             setInput={setInput}
                             message={message[idx]}
                             image={item}
@@ -736,60 +781,7 @@ const Ai = () => {
                     </div>
                   )}
 
-                  {/* <div className="chat__sidebar">
-                    <div className="sidebar_header">
-                      <div className="fn__new_chat_link">
-                        <span className="icon svgimg">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                          >
-                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-                          </svg>
-                        </span>
-                        <span className="text">History</span>
-                        {idx % 2 == 0 ? (
-                          <div className="chat__box your__chat">
-                            <div className="author">
-                              <span>You</span>
-                            </div>
-                            <div className="chat">{message}</div>
-                          </div>
-                        ) : (
-                          <div className="chat__box bot__chat">
-                            <div className="author">
-                              <span>Bot</span>
-                            </div>
-                            {!image ? (
-                              // messageArr.map((item, index) => {
-                              // return (
-                              <div className="chat">
-                                <p>{message}</p>
-                              </div>
-                            ) : (
-                              //   );
-                              // })
-                              <Image
-                                src={message}
-                                height={300}
-                                width={300}
-                                style={{
-                                  margin: "5px auto",
-                                }}
-                                alt="Your Image"
-                              />
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="sidebar_content">
-                      <div className="chat__group new">
-                        <h2 className="group__title">Today</h2>
-                      </div>
-                    </div>
-                  </div> */}
+                  {drawer ? <ChatHistory data={data} /> : <span></span>}
                 </div>
               </div>
 
