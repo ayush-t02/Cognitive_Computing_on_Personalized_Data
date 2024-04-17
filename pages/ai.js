@@ -342,21 +342,30 @@ const Ai = () => {
             message: input,
           }),
         });
-        let decoder = new TextDecoderStream();
-        const reader = response.body.pipeThrough(decoder).getReader();
+        // let decoder = new TextDecoderStream();
+        // const reader = response.body.pipeThrough(decoder).getReader();
         var lastMessage = "";
+        let data = await response.text();
+        console.log(JSON.parse(data));
         setInitialMessage(false);
         setimage((prev) => [...prev, false]);
-        while (true) {
-          const { value, done } = await reader.read();
-          if (done) break;
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages];
-            lastMessage = lastMessage + value;
-            updatedMessages[updatedMessages.length - 1] = lastMessage;
-            return updatedMessages;
-          });
-        }
+        // setMessages((state) => [...state, data]);
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages];
+          lastMessage = lastMessage + JSON.parse(data);
+          updatedMessages[updatedMessages.length - 1] = lastMessage;
+          return updatedMessages;
+        });
+        // while (true) {
+        //   const { value, done } = await reader.read();
+        //   if (done) break;
+        //   setMessages((prevMessages) => {
+        //     const updatedMessages = [...prevMessages];
+        //     lastMessage = lastMessage + value;
+        //     updatedMessages[updatedMessages.length - 1] = lastMessage;
+        //     return updatedMessages;
+        //   });
+        // }
       }
     } else {
       toast.error("Please login");

@@ -158,11 +158,10 @@ const Chat = ({
                     // messageArr.map((item, index) => {
                     // return (
                     <div className="chat">
-                      <p>{message}</p>
+                      <ReactMarkdown>{message}</ReactMarkdown>
                     </div>
                   ) : (
-                    //   );
-                    // })
+                    
                     <Image
                       src={message}
                       height={300}
