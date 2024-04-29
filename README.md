@@ -19,11 +19,11 @@ The web app's interface is user-friendly, featuring a responsive chat window for
 
 ## Links
 
-- GitHub Repo link: [Link to repository](https://github.com/ayush-t02/Cognitive_Computing_on_Personalized_Data)
-
 - Bachelor Thesis: [Link](./report/Major%20Project%20Blackbook%20Hasnain.pdf)
 
 - Working: [Link](https://drive.google.com/file/d/1w26LS0k4qnyQ1_euui1IMgHb5_1abz-u/view?usp=sharing)
+
+- GitHub Repo link: [Link to repository](https://github.com/ayush-t02/Cognitive_Computing_on_Personalized_Data)
 
 ## Technology stack
 
