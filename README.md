@@ -9,13 +9,13 @@
 
 ## Description
 
-Computing encompasses imperative, autonomous, and cognitive technologies. Imperative computing follows programmed instructions on stored data, while autonomous computing makes independent decisions on procedural data. Cognitive computing mirrors human brain processes like reasoning and learning. It's advanced and not restricted to specific data, utilizing a web scraping approach.
+This project aims to address the prevalent issue of context length constraints in language models like ChatGPT. Often, these models face challenges due to their limited ability to process lengthy contexts, which can hinder their performance in generating coherent and contextually accurate responses. To overcome this, the project introduces an innovative approach using Retrieval-Augmented Generation (RAG). RAG assists by dynamically retrieving external data during the generation process, which allows the language model to access a broader range of information without being restricted by its immediate context.
 
-Cognitive Computing aligns with Large Language Models (LLMs), such as GPT-4 (8K), operating through tokenization—breaking prompts into units for processing. Tokenization varies, with tokens ranging from letters to words. LLMs like GPT-4 have an 8K token limit, beyond which context is lost.
+The core of the proposed solution is the development of a web-based platform that integrates a sophisticated vector database designed to store and manage users' data. This platform utilizes advanced semantic search algorithms to analyze and retrieve relevant data from this diverse content repository. After processing the input prompt, the system performs a semantic search to fetch pertinent content, which is then used as references for the language model to enhance the accuracy and relevance of its outputs.
 
-To address this, Langchain uses a recursive model, breaking data into manageable chunks. These are converted into vectors and stored in Pinecone for semantic search. User prompts trigger refined data retrieval by LLMs, enhancing clarity. Flask APIs manage services like text-to-video, image, or summarization.
+The platform is designed to handle inputs across a diverse formats including images, YouTube links, and MP3 files. For videos, it employs the BART algorithm to summarize the content efficiently, even addressing scenarios where videos are in different languages. This is facilitated by fetching metadata through the YouTube API, which is then effectively summarized using a LLM to provide concise and relevant content overviews. Similarly, the system is equipped to summarize content from images and MP3 files, ensuring a comprehensive and versatile user experience that accommodates various types of media.
 
-The web app's interface is user-friendly, featuring a responsive chat window for custom data interaction. Users can navigate content-specific pages for text, audio, image, and video inputs. Langchain ensures precise, custom data-based responses, overcoming token limitations.
+Additionally, the platform incorporates the capability to generate images using the Stable Diffusion algorithm, further enriching the user interaction experience by providing visual content generation based on textual prompts. The system also maintains a comprehensive chat history, allowing for continuity in interactions and the ability to reference past conversations.
 
 ## Links
 
