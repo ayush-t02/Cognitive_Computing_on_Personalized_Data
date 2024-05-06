@@ -23,7 +23,7 @@ Additionally, the platform incorporates the capability to generate images using 
 
 - Working: [Link](https://drive.google.com/file/d/1w26LS0k4qnyQ1_euui1IMgHb5_1abz-u/view?usp=sharing)
 
-- GitHub Repo link: [Link to repository](https://github.com/ayush-t02/Cognitive_Computing_on_Personalized_Data)
+- Prizes: [Link](./certificates/README.md)
 
 ## Technology stack
 
