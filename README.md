@@ -19,7 +19,7 @@ Additionally, the platform incorporates the capability to generate images using 
 
 ## Links
 
-- Bachelor Thesis: [Link](./report/Major%20Project%20Blackbook%20Hasnain.pdf)
+- Bachelor Thesis: [Link](./report/Bachelor's%20Thesis.pdf)
 
 - Working: [Link](https://drive.google.com/file/d/1w26LS0k4qnyQ1_euui1IMgHb5_1abz-u/view?usp=sharing)
 
