@@ -27,14 +27,15 @@ Additionally, the platform incorporates the capability to generate images using 
 
 ## Technology stack
 
-Tools and technologies that you learnt and used in the project.
+Tools and technologies that are used in the project.
 
 1. NextJS
 2. Langchain
-3. Huggingface API
-4. Python Flask
-5. Pinecone
-6. Firebase
+3. NodeJS
+4. Huggingface API
+5. Python Flask
+6. Pinecone
+7. Firebase
 
 ## Project Setup
 
